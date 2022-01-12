@@ -10,7 +10,7 @@ jmix {
     projectId = 'rys'
 }
 
-group = 'com.company'
+group = 'de.diedavids.jmix'
 version = '0.0.1-SNAPSHOT'
 
 repositories {
