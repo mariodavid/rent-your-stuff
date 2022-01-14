@@ -10,6 +10,23 @@ jobs:
   ci:
     name: CI pipeline
     runs-on: ubuntu-latest
+
+    container:
+      image: ubuntu:latest
+
+    services:
+      postgres:
+        image: postgres:13.5-alpine
+        env:
+          POSTGRES_DB: rent_your_stuff
+          POSTGRES_USER: db_user
+          POSTGRES_PASSWORD: db_password
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
     steps:
       - name: Git Checkout
         uses: actions/checkout@v1
@@ -20,6 +37,10 @@ jobs:
           java-version: 17
 
       - name: Run tests
+        env:
+          MAIN_DATASOURCE_URL: jdbc:postgresql://postgres:5432/rent_your_stuff
+          MAIN_DATASOURCE_USERNAME: db_user
+          MAIN_DATASOURCE_PASSWORD: db_password
         run: ./gradlew test
 
       - name: Publish Test Report
