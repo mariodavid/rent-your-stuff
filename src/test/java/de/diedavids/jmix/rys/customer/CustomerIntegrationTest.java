@@ -25,8 +25,6 @@ class CustomerIntegrationTest {
     @Autowired
     SystemAuthenticator systemAuthenticator;
 
-    @Autowired
-    Validator validator;
     private Customer customer;
 
     @BeforeEach
@@ -56,30 +54,5 @@ class CustomerIntegrationTest {
         // then
         assertThat(savedCustomer.getId())
                 .isNotNull();
-    }
-
-    @Test
-    void given_customerWithInvalidEmail_when_validateCustomer_then_customerIsInvalid() {
-
-        // given
-        customer.setEmail("invalidEmailAddress");
-
-        // when
-        Set<ConstraintViolation<Customer>> violations = validator.validate(customer, Default.class);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        // and
-        assertThat(firstViolation(violations).getPropertyPath().toString())
-                .isEqualTo("email");
-
-        assertThat(firstViolation(violations).getMessageTemplate())
-                .isEqualTo("{javax.validation.constraints.Email.message}");
-    }
-
-    private ConstraintViolation<Customer> firstViolation(Set<ConstraintViolation<Customer>> violations) {
-        return violations.stream().findFirst().orElseThrow();
     }
 }
