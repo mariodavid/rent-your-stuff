@@ -3,6 +3,7 @@ package de.diedavids.jmix.rys.customer.screen;
 import de.diedavids.jmix.rys.RentYourStuffApplication;
 import de.diedavids.jmix.rys.customer.Customer;
 import de.diedavids.jmix.rys.entity.Address;
+import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import io.jmix.core.DataManager;
 import io.jmix.ui.Screens;
 import io.jmix.ui.component.Button;
@@ -31,12 +32,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CustomerBrowseTest {
 
     @Autowired
+    DatabaseCleanup databaseCleanup;
+    @Autowired
     DataManager dataManager;
 
     private Customer customer;
 
+
     @BeforeEach
     void setUp() {
+
+        databaseCleanup.removeAllEntities(Customer.class);
+
         customer = dataManager.create(Customer.class);
 
         customer.setFirstName("Foo");

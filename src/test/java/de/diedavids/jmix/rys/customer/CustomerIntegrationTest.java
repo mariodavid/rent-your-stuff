@@ -1,6 +1,7 @@
 package de.diedavids.jmix.rys.customer;
 
 import de.diedavids.jmix.rys.entity.Address;
+import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import io.jmix.core.DataManager;
 import io.jmix.core.security.SystemAuthenticator;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CustomerIntegrationTest {
 
     @Autowired
+    DatabaseCleanup databaseCleanup;
+    @Autowired
     DataManager dataManager;
 
     @Autowired
@@ -29,6 +32,7 @@ class CustomerIntegrationTest {
 
     @BeforeEach
     void setUp() {
+        databaseCleanup.removeAllEntities(Customer.class);
         customer = dataManager.create(Customer.class);
     }
 
