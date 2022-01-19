@@ -1,6 +1,7 @@
 package de.diedavids.jmix.rys.customer;
 
 import de.diedavids.jmix.rys.entity.Address;
+import de.diedavids.jmix.rys.test_support.ValidationVerification;
 import io.jmix.core.DataManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

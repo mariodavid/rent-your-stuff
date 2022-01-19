@@ -1,4 +1,4 @@
-package de.diedavids.jmix.rys.customer;
+package de.diedavids.jmix.rys.test_support;
 
 import de.diedavids.jmix.rys.entity.Address;
 import org.springframework.beans.factory.annotation.Autowired;
