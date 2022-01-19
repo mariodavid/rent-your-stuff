@@ -5,7 +5,9 @@ import de.diedavids.jmix.rys.customer.Customer;
 import de.diedavids.jmix.rys.entity.Address;
 import io.jmix.core.DataManager;
 import io.jmix.ui.Screens;
+import io.jmix.ui.component.Button;
 import io.jmix.ui.component.Table;
+import io.jmix.ui.screen.Screen;
 import io.jmix.ui.testassist.UiTestAssistConfiguration;
 import io.jmix.ui.testassist.junit.UiTest;
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +58,50 @@ class CustomerBrowseTest {
         // expect:
         assertThat(firstLoadedCustomer(customerBrowse))
                 .isEqualTo(customer);
+    }
+
+
+    @Test
+    void given_oneCustomerExists_when_editCustomer_then_editCustomerEditorIsShown(Screens screens) {
+
+        // given:
+        CustomerBrowse customerBrowse = openCustomerBrowse(screens);
+
+        // and:
+        Customer firstCustomer = firstLoadedCustomer(customerBrowse);
+
+        // and:
+        selectCustomerInTable(customerBrowse, firstCustomer);
+
+        // when:
+        button(customerBrowse, "editBtn").click();
+
+        // then:
+        CustomerEdit customerEdit = screenOfType(screens, CustomerEdit.class);
+
+        assertThat(customerEdit.getEditedEntity())
+                .isEqualTo(firstCustomer);
+    }
+
+    private void selectCustomerInTable(CustomerBrowse customerBrowse, Customer firstCustomer) {
+        Table<Customer> customerTable = customerTable(customerBrowse);
+
+        customerTable.setSelected(firstCustomer);
+    }
+
+    @NotNull
+    private <T> T screenOfType(Screens screens, Class<T> tClass) {
+        Screen screen = screens.getOpenedScreens().getActiveScreens().stream().findFirst().orElseThrow();
+
+        assertThat(screen)
+                .isInstanceOf(tClass);
+
+        return (T) screen;
+    }
+
+    @Nullable
+    private Button button(CustomerBrowse customerBrowse, String buttonId) {
+        return (Button) customerBrowse.getWindow().getComponent(buttonId);
     }
 
 
