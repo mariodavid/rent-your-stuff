@@ -7,4 +7,5 @@ import de.diedavids.jmix.rys.customer.Customer;
 @UiDescriptor("customer-browse.xml")
 @LookupComponent("customersTable")
 public class CustomerBrowse extends StandardLookup<Customer> {
+
 }
