@@ -2,6 +2,7 @@ package de.diedavids.jmix.rys.customer.screen;
 
 import de.diedavids.jmix.rys.RentYourStuffApplication;
 import de.diedavids.jmix.rys.customer.Customer;
+import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import de.diedavids.jmix.rys.test_support.ui.FormInteractions;
 import io.jmix.core.DataManager;
 import io.jmix.core.querycondition.PropertyCondition;
@@ -10,6 +11,7 @@ import io.jmix.ui.testassist.UiTestAssistConfiguration;
 import io.jmix.ui.testassist.junit.UiTest;
 import io.jmix.ui.util.OperationResult;
 import org.jetbrains.annotations.NotNull;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -30,7 +32,16 @@ class CustomerEditTest {
     @Autowired
     DataManager dataManager;
 
+    @Autowired
+    DatabaseCleanup databaseCleanup;
+
     FormInteractions formInteractions;
+
+
+    @BeforeEach
+    void setUp() {
+        databaseCleanup.removeAllEntities(Customer.class);
+    }
 
     @Test
     void given_validCustomer_when_saveCustomerThroughTheForm_then_customerIsSaved(Screens screens) {
