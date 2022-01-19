@@ -6,7 +6,7 @@ plugins {
 apply plugin: 'org.springframework.boot'
 
 jmix {
-    bomVersion = '1.1.2'
+    bomVersion = '1.2.0-SNAPSHOT'
     projectId = 'rys'
 }
 
@@ -16,7 +16,8 @@ version = '0.0.1-SNAPSHOT'
 repositories {
     mavenCentral()
     maven {
-        url 'https://global.repo.jmix.io/repository/public'
+//        url 'https://global.repo.jmix.io/repository/public'
+        url 'https://nexus.jmix.io/repository/public'
     }
 }
 
@@ -38,7 +39,13 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    testImplementation 'io.jmix.ui:jmix-ui-test-assist'
+
     implementation("org.postgresql:postgresql")
+
+
+    testImplementation("org.hsqldb:hsqldb")
 }
 
 test {
