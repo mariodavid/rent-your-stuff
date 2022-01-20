@@ -1,14 +1,15 @@
 package de.diedavids.jmix.rys.product;
 
 import de.diedavids.jmix.rys.entity.StandardEntity;
+import io.jmix.core.DeletePolicy;
+import io.jmix.core.entity.annotation.OnDelete;
+import io.jmix.core.metamodel.annotation.Composition;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @JmixEntity
 @Table(name = "RYS_PRODUCT")
@@ -22,6 +23,19 @@ public class Product extends StandardEntity {
     @Column(name = "DESCRIPTION")
     @Lob
     private String description;
+
+    @Composition
+    @OnDelete(DeletePolicy.CASCADE)
+    @OneToMany(mappedBy = "product")
+    private List<ProductPrice> prices;
+
+    public List<ProductPrice> getPrices() {
+        return prices;
+    }
+
+    public void setPrices(List<ProductPrice> prices) {
+        this.prices = prices;
+    }
 
     public String getDescription() {
         return description;

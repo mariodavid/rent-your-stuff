@@ -1,15 +1,21 @@
 package de.diedavids.jmix.rys.product;
 
-import de.diedavids.jmix.rys.customer.Customer;
-import de.diedavids.jmix.rys.entity.Address;
 import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import io.jmix.core.DataManager;
+import io.jmix.core.Id;
 import io.jmix.core.security.SystemAuthenticator;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+
+import static de.diedavids.jmix.rys.product.PriceUnit.*;
+import static java.math.BigDecimal.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -26,20 +32,55 @@ class ProductStorageTest {
     @BeforeEach
     void setUp() {
         databaseCleanup.removeAllEntities(Product.class);
+        databaseCleanup.removeAllEntities(ProductPrice.class);
     }
 
     @Test
     void given_validProduct_when_save_then_productIsSaved() {
-        Product product = dataManager.create(Product.class);
         // given
+        Product product = dataManager.create(Product.class);
         product.setName("Foo Product");
         product.setDescription("Foo Description");
 
         // when
-        Product savedProduct = systemAuthenticator.withSystem(() -> dataManager.save(product));
+        Product savedProduct = systemAuthenticator.withSystem(() ->
+            dataManager.save(product)
+        );
 
         // then
         assertThat(savedProduct.getId())
                 .isNotNull();
+    }
+
+    @Test
+    void given_validProductWithPrices_when_save_then_productAndPricesAreSaved() {
+        // given
+        Product product = dataManager.create(Product.class);
+        product.setName("Foo Product");
+        product.setDescription("Foo Description");
+
+        // and
+        ProductPrice pricePerDay = createProductPrice(ONE, DAY, product);
+        ProductPrice pricePerWeek = createProductPrice(TEN, WEEK, product);
+        product.setPrices(List.of(pricePerDay, pricePerWeek));
+
+        // when
+        Optional<Product> savedProduct = systemAuthenticator.withSystem(() -> {
+            dataManager.save(product, pricePerDay, pricePerWeek);
+            return dataManager.load(Id.of(product)).optional();
+        });
+
+        // then
+        assertThat(savedProduct)
+                .isPresent();
+    }
+
+    @NotNull
+    private ProductPrice createProductPrice(BigDecimal amount, PriceUnit priceUnit, Product product) {
+        ProductPrice pricePerWeek = dataManager.create(ProductPrice.class);
+        pricePerWeek.setAmount(amount);
+        pricePerWeek.setProduct(product);
+        pricePerWeek.setUnit(priceUnit);
+        return pricePerWeek;
     }
 }

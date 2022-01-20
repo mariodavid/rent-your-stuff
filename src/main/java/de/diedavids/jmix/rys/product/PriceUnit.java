@@ -7,7 +7,9 @@ import javax.annotation.Nullable;
 
 public enum PriceUnit implements EnumClass<String> {
 
-    ;
+    DAY("DAY"),
+    WEEK("WEEK"),
+    MONTH("MONTH");
 
     private String id;
 
