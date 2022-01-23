@@ -1,34 +1,25 @@
 package de.diedavids.jmix.rys.customer.screen;
 
-import de.diedavids.jmix.rys.RentYourStuffApplication;
 import de.diedavids.jmix.rys.customer.Customer;
 import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import de.diedavids.jmix.rys.test_support.ui.FormInteractions;
 import de.diedavids.jmix.rys.test_support.ui.ScreenInteractions;
+import de.diedavids.jmix.rys.test_support.ui.WebIntegrationTest;
 import io.jmix.core.DataManager;
 import io.jmix.core.querycondition.PropertyCondition;
 import io.jmix.ui.Screens;
-import io.jmix.ui.testassist.UiTestAssistConfiguration;
-import io.jmix.ui.testassist.junit.UiTest;
 import io.jmix.ui.util.OperationResult;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@UiTest(authenticatedUser = "admin", mainScreenId = "rys_MainScreen", screenBasePackages = "de.diedavids.jmix.rys")
-@ContextConfiguration(classes = {RentYourStuffApplication.class, UiTestAssistConfiguration.class})
-@AutoConfigureTestDatabase
-class CustomerEditTest {
+class CustomerEditTest extends WebIntegrationTest {
 
     @Autowired
     DataManager dataManager;

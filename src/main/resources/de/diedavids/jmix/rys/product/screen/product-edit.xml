@@ -46,9 +46,9 @@
                     <column id="unit"/>
                 </columns>
                 <buttonsPanel>
-                    <button action="pricesTable.create"/>
-                    <button action="pricesTable.edit"/>
-                    <button action="pricesTable.remove"/>
+                    <button id="createBtn" action="pricesTable.create"/>
+                    <button id="editBtn" action="pricesTable.edit"/>
+                    <button id="removeBtn" action="pricesTable.remove"/>
                 </buttonsPanel>
             </table>
         </groupBox>
