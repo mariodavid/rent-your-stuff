@@ -4,6 +4,7 @@ import de.diedavids.jmix.rys.RentYourStuffApplication;
 import de.diedavids.jmix.rys.customer.Customer;
 import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import de.diedavids.jmix.rys.test_support.ui.FormInteractions;
+import de.diedavids.jmix.rys.test_support.ui.ScreenInteractions;
 import io.jmix.core.DataManager;
 import io.jmix.core.querycondition.PropertyCondition;
 import io.jmix.ui.Screens;
@@ -47,16 +48,17 @@ class CustomerEditTest {
     void given_validCustomer_when_saveCustomerThroughTheForm_then_customerIsSaved(Screens screens) {
 
         // given:
-        CustomerEdit customerEdit = openCustomerEdit(screens);
+        ScreenInteractions screenInteractions = ScreenInteractions.forEditor(screens, dataManager);
+        CustomerEdit customerEdit = screenInteractions.openEditorForCreation(CustomerEdit.class, Customer.class);
         formInteractions = FormInteractions.of(customerEdit);
 
         // and:
         String firstName = "Foo" + UUID.randomUUID();
 
-        formInteractions.setFieldValue("firstNameField", firstName);
+        formInteractions.setTextFieldValue("firstNameField", firstName);
         String expectedLastName = "Bar";
-        formInteractions.setFieldValue("lastNameField", expectedLastName);
-        formInteractions.setFieldValue("addressStreetField", "Foo Street 123");
+        formInteractions.setTextFieldValue("lastNameField", expectedLastName);
+        formInteractions.setTextFieldValue("addressStreetField", "Foo Street 123");
 
         // when:
         OperationResult operationResult = formInteractions.saveForm();
@@ -79,15 +81,16 @@ class CustomerEditTest {
     void given_customerWithoutStreet_when_saveCustomerThroughTheForm_then_customerIsNotSaved(Screens screens) {
 
         // given:
-        CustomerEdit customerEdit = openCustomerEdit(screens);
+        ScreenInteractions screenInteractions = ScreenInteractions.forEditor(screens, dataManager);
+        CustomerEdit customerEdit = screenInteractions.openEditorForCreation(CustomerEdit.class, Customer.class);
         formInteractions = FormInteractions.of(customerEdit);
 
         // and:
         String firstName = "Foo" + UUID.randomUUID();
 
-        formInteractions.setFieldValue("firstNameField", firstName);
+        formInteractions.setTextFieldValue("firstNameField", firstName);
         String invalidStreetAddress = "";
-        formInteractions.setFieldValue("addressStreetField", invalidStreetAddress);
+        formInteractions.setTextFieldValue("addressStreetField", invalidStreetAddress);
 
         // when:
         OperationResult operationResult = formInteractions.saveForm();
@@ -108,17 +111,6 @@ class CustomerEditTest {
         return dataManager.load(Customer.class)
                 .condition(PropertyCondition.equal(attribute, value))
                 .optional();
-    }
-
-
-    @NotNull
-    private CustomerEdit openCustomerEdit(Screens screens) {
-        CustomerEdit screen = screens.create(CustomerEdit.class);
-
-        Customer customer = dataManager.create(Customer.class);
-        screen.setEntityToEdit(customer);
-        screen.show();
-        return screen;
     }
 
 }
