@@ -46,7 +46,6 @@ class ProductBrowseTest extends WebIntegrationTest {
         // given:
         ScreenInteractions screenInteractions = ScreenInteractions.forBrowse(screens);
         ProductBrowse productBrowse = screenInteractions.open(ProductBrowse.class);
-
         TableInteractions<Product> productTable = productTable(productBrowse);
 
         // expect:
@@ -61,8 +60,8 @@ class ProductBrowseTest extends WebIntegrationTest {
         // given:
         ScreenInteractions screenInteractions = ScreenInteractions.forBrowse(screens);
         ProductBrowse productBrowse = screenInteractions.open(ProductBrowse.class);
-
         TableInteractions<Product> productTable = productTable(productBrowse);
+
         // and:
         Product firstProduct = productTable.firstItem();
 
