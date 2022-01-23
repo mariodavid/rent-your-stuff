@@ -1,9 +1,6 @@
 package de.diedavids.jmix.rys.product.screen;
 
 import de.diedavids.jmix.rys.product.Product;
-import de.diedavids.jmix.rys.product.screen.ProductBrowse;
-import de.diedavids.jmix.rys.product.screen.ProductEdit;
-import de.diedavids.jmix.rys.entity.Address;
 import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import de.diedavids.jmix.rys.test_support.ui.ScreenInteractions;
 import de.diedavids.jmix.rys.test_support.ui.TableInteractions;
