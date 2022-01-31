@@ -1,5 +1,7 @@
 package de.diedavids.jmix.rys.product;
 
+import de.diedavids.jmix.rys.entity.Currency;
+import de.diedavids.jmix.rys.entity.Money;
 import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import io.jmix.core.DataManager;
 import io.jmix.core.Id;
@@ -78,7 +80,10 @@ class ProductStorageTest {
     @NotNull
     private ProductPrice createProductPrice(BigDecimal amount, PriceUnit priceUnit, Product product) {
         ProductPrice pricePerWeek = dataManager.create(ProductPrice.class);
-        pricePerWeek.setAmount(amount);
+        Money money = dataManager.create(Money.class);
+        money.setCurrency(Currency.EUR);
+        money.setAmount(amount);
+        pricePerWeek.setPrice(money);
         pricePerWeek.setProduct(product);
         pricePerWeek.setUnit(priceUnit);
         return pricePerWeek;

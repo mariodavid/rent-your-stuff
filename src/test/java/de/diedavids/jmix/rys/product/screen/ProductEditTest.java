@@ -96,7 +96,7 @@ class ProductEditTest extends WebIntegrationTest {
         BigDecimal expectedAmount = BigDecimal.TEN;
         PriceUnit expectedUnit = PriceUnit.DAY;
 
-        priceForm.setNumberFieldValue("amountField", expectedAmount);
+        priceForm.setCurrencyFieldValue("priceAmountField", expectedAmount);
         priceForm.setEnumFieldValue("unitField", expectedUnit);
 
         // when:
@@ -128,7 +128,7 @@ class ProductEditTest extends WebIntegrationTest {
         // and:
         ProductPrice price = prices.get(0);
 
-        assertThat(price.getAmount())
+        assertThat(price.getPrice().getAmount())
                 .isEqualByComparingTo(expectedAmount);
 
         assertThat(price.getUnit())
