@@ -34,6 +34,13 @@ public class RentYourStuffApplication {
 
     @Bean
     @Primary
+    @ConfigurationProperties("rys")
+    RentYourStuffProperties rentYourStuffProperties() {
+        return new RentYourStuffProperties();
+    }
+
+    @Bean
+    @Primary
     @ConfigurationProperties("main.datasource.hikari")
     DataSource dataSource(DataSourceProperties dataSourceProperties) {
         return dataSourceProperties.initializeDataSourceBuilder().build();

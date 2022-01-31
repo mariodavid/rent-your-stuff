@@ -1,11 +1,14 @@
 package de.diedavids.jmix.rys.product;
 
+import de.diedavids.jmix.rys.entity.Money;
 import de.diedavids.jmix.rys.entity.StandardEntity;
+import io.jmix.core.entity.annotation.EmbeddedParameters;
 import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
@@ -20,14 +23,28 @@ public class ProductPrice extends StandardEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     private Product product;
 
+    @Valid
     @NotNull
-    @PositiveOrZero
-    @Column(name = "AMOUNT", nullable = false, precision = 19, scale = 2)
-    private BigDecimal amount;
+    @EmbeddedParameters(nullAllowed = false)
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "amount", column = @Column(name = "PRICE_AMOUNT")),
+            @AttributeOverride(name = "currency", column = @Column(name = "PRICE_CURRENCY"))
+    })
+    private Money price;
+
 
     @NotNull
     @Column(name = "UNIT", nullable = false)
     private String unit;
+
+    public Money getPrice() {
+        return price;
+    }
+
+    public void setPrice(Money price) {
+        this.price = price;
+    }
 
     public Product getProduct() {
         return product;
@@ -46,17 +63,9 @@ public class ProductPrice extends StandardEntity {
     }
 
 
-    public BigDecimal getAmount() {
-        return amount;
-    }
-
-    public void setAmount(BigDecimal amount) {
-        this.amount = amount;
-    }
-
     @InstanceName
-    @DependsOnProperties({"amount", "unit"})
+    @DependsOnProperties({"price", "unit"})
     public String getInstanceName() {
-        return String.format("%s / %s", amount, unit);
+        return String.format("%s / %s", price, unit);
     }
 }
