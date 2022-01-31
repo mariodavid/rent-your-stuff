@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="rys">
+        <renameColumn
+                       columnDataType="DECIMAL(19, 2)"
+                       newColumnName="PRICE_AMOUNT"
+                       oldColumnName="AMOUNT"
+                       tableName="RYS_PRODUCT_PRICE"/>
+    </changeSet>
+    <changeSet id="2" author="rys">
+        <addColumn tableName="RYS_PRODUCT_PRICE">
+            <column name="PRICE_CURRENCY" type="VARCHAR(255)"/>
+        </addColumn>
+
+        <addNotNullConstraint columnName="PRICE_CURRENCY" tableName="RYS_PRODUCT_PRICE" defaultNullValue="EUR"/>
+    </changeSet>
+</databaseChangeLog>

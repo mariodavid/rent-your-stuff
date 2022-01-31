@@ -6,7 +6,7 @@
         <instance id="productDc"
                   class="de.diedavids.jmix.rys.product.Product">
             <fetchPlan extends="_base">
-                <property name="prices" fetchPlan="_instance_name"/>
+                <property name="prices" fetchPlan="_base"/>
             </fetchPlan>
             <loader/>
             <collection id="pricesDc" property="prices"/>
@@ -42,7 +42,7 @@
                     <action id="remove" type="remove"/>
                 </actions>
                 <columns>
-                    <column id="amount"/>
+                    <column id="price" align="RIGHT"/>
                     <column id="unit"/>
                 </columns>
                 <buttonsPanel>
