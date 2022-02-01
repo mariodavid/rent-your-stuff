@@ -10,6 +10,8 @@ import io.jmix.ui.util.OperationResult;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class FormInteractions {
 
@@ -40,6 +42,10 @@ public class FormInteractions {
         return (ComboBox<EnumClass<String>>) editor.getWindow().getComponent(componentId);
     }
 
+    <T> ComboBox<T> entityComboBoxField(String componentId, Class<T> entityClass) {
+        return (ComboBox<T>) editor.getWindow().getComponent(componentId);
+    }
+
     @Nullable
     Button button(String buttonId) {
         return (Button) editor.getWindow().getComponent(buttonId);
@@ -63,4 +69,14 @@ public class FormInteractions {
         comboBoxField(componentId).setValue(value);
     }
 
+    public <T> List<T> getEntityComboBoxValues(String componentId, Class<T> entityClass) {
+        return entityComboBoxField(componentId, entityClass).getOptions().getOptions().collect(Collectors.toList());
+    }
+
+    public <T> void setEntityComboxBoxFieldValue(String componentId, T entity, Class<T> entityClass) {
+        ComboBox<T> tComboBox = entityComboBoxField(componentId, entityClass);
+
+        T entityFromComboBox = tComboBox.getOptions().getOptions().filter(t -> t.equals(entity)).findFirst().orElseThrow();
+        tComboBox.setValue(entityFromComboBox);
+    }
 }
