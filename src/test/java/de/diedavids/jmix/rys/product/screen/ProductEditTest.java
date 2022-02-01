@@ -1,10 +1,9 @@
 package de.diedavids.jmix.rys.product.screen;
 
-import de.diedavids.jmix.rys.RentYourStuffApplication;
 import de.diedavids.jmix.rys.product.PriceUnit;
 import de.diedavids.jmix.rys.product.Product;
+import de.diedavids.jmix.rys.product.ProductCategory;
 import de.diedavids.jmix.rys.product.ProductPrice;
-import de.diedavids.jmix.rys.product.screen.ProductEdit;
 import de.diedavids.jmix.rys.product.screen.productprice.ProductPriceEdit;
 import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import de.diedavids.jmix.rys.test_support.ui.FormInteractions;
@@ -14,17 +13,11 @@ import de.diedavids.jmix.rys.test_support.ui.WebIntegrationTest;
 import io.jmix.core.DataManager;
 import io.jmix.core.querycondition.PropertyCondition;
 import io.jmix.ui.Screens;
-import io.jmix.ui.testassist.UiTestAssistConfiguration;
-import io.jmix.ui.testassist.junit.UiTest;
 import io.jmix.ui.util.OperationResult;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -47,6 +40,7 @@ class ProductEditTest extends WebIntegrationTest {
     @BeforeEach
     void setUp() {
         databaseCleanup.removeAllEntities(Product.class);
+        databaseCleanup.removeAllEntities(ProductCategory.class);
     }
 
     @Test
@@ -73,6 +67,60 @@ class ProductEditTest extends WebIntegrationTest {
         assertThat(savedProduct)
                 .isPresent();
     }
+
+    @Test
+    void given_twoProductCategoriesAreInDb_when_openingTheProductEditor_then_categoriesAreDisplayedInTheComboBox(Screens screens) {
+
+        // given:
+        ProductCategory productCategory1 = saveProductCategory("Product Category 1");
+        ProductCategory productCategory2 = saveProductCategory("Product Category 2");
+
+
+        // when:
+        ScreenInteractions screenInteractions = ScreenInteractions.forEditor(screens, dataManager);
+        ProductEdit productEdit = screenInteractions.openEditorForCreation(ProductEdit.class, Product.class);
+        formInteractions = FormInteractions.of(productEdit);
+
+        // expect:
+        List<ProductCategory> availableProductCategories = formInteractions.getEntityComboBoxValues("categoryField", ProductCategory.class);
+
+        assertThat(availableProductCategories)
+                .contains(productCategory1, productCategory2);
+    }
+
+    @Test
+    void given_validProductWithCategory_when_saveProductThroughTheForm_then_productAndCategoryAssociationAreSaved(Screens screens) {
+
+        // given:
+        ProductCategory productCategory1 = saveProductCategory("Product Category 1");
+
+        ScreenInteractions screenInteractions = ScreenInteractions.forEditor(screens, dataManager);
+        ProductEdit productEdit = screenInteractions.openEditorForCreation(ProductEdit.class, Product.class);
+        formInteractions = FormInteractions.of(productEdit);
+
+        // and:
+        String name = "Foo Product" + UUID.randomUUID();
+        formInteractions.setTextFieldValue("nameField", name);
+
+        // and:
+        formInteractions.setEntityComboxBoxFieldValue("categoryField", productCategory1, ProductCategory.class);
+
+        // when:
+        OperationResult operationResult = formInteractions.saveForm();
+
+        assertThat(operationResult)
+                .isEqualTo(OperationResult.success());
+
+        // then:
+        Optional<Product> savedProduct = findProductByAttribute("name", name);
+
+        assertThat(savedProduct)
+                .isPresent()
+                .get()
+                .extracting("category")
+                .isEqualTo(productCategory1);
+    }
+
     @Test
     void given_validProductWithPrice_when_saveProductThroughTheForm_then_productAndPriceAreSaved(Screens screens) {
 
@@ -167,4 +215,10 @@ class ProductEditTest extends WebIntegrationTest {
                 .optional();
     }
 
+    @NotNull
+    private ProductCategory saveProductCategory(String name) {
+        ProductCategory productCategory = dataManager.create(ProductCategory.class);
+        productCategory.setName(name);
+        return dataManager.save(productCategory);
+    }
 }
