@@ -184,7 +184,7 @@ class ProductEditTest extends WebIntegrationTest {
     }
 
     @Test
-    void given_productWithoutStreet_when_saveProductThroughTheForm_then_productIsNotSaved(Screens screens) {
+    void given_productWithoutName_when_saveProductThroughTheForm_then_productIsNotSaved(Screens screens) {
 
         // given:
         ScreenInteractions screenInteractions = ScreenInteractions.forEditor(screens, dataManager);
