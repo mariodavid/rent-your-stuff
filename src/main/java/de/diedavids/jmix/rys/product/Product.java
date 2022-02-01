@@ -29,6 +29,18 @@ public class Product extends StandardEntity {
     @OneToMany(mappedBy = "product")
     private List<ProductPrice> prices;
 
+    @JoinColumn(name = "CATEGORY_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ProductCategory category;
+
+    public ProductCategory getCategory() {
+        return category;
+    }
+
+    public void setCategory(ProductCategory category) {
+        this.category = category;
+    }
+
     public List<ProductPrice> getPrices() {
         return prices;
     }

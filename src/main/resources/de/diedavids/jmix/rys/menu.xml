@@ -6,6 +6,8 @@
         <item screen="themeSettingsScreen" caption="msg://io.jmix.ui.app.themesettings/themeSettings.caption"/>
         <item screen="rys_Customer.browse" caption="msg://de.diedavids.jmix.rys.customer.screen/customerBrowse.menu"/>
         <item screen="rys_Product.browse" caption="msg://de.diedavids.jmix.rys.product.screen/productBrowse.menu"/>
+        <item screen="rys_ProductCategory.browse"
+              caption="msg://de.diedavids.jmix.rys.product.screen.productcategory/productCategoryBrowse.menu"/>
     </menu>
 
 </menu-config>
