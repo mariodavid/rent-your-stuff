@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <window xmlns="http://jmix.io/schema/ui/window"
         xmlns:c="http://jmix.io/schema/ui/jpql-condition"
-        caption="msg://productBrowse.caption"
-        focusComponent="productsTable">
+        caption="msg://productCategoryBrowse.caption"
+        focusComponent="productCategoriesTable">
     <data readOnly="true">
-        <collection id="productsDc"
-                    class="de.diedavids.jmix.rys.product.Product">
-            <fetchPlan extends="_base">
-                <property name="category"/>
-            </fetchPlan>
-            <loader id="productsDl">
+        <collection id="productCategoriesDc"
+                    class="de.diedavids.jmix.rys.product.ProductCategory">
+            <fetchPlan extends="_base"/>
+            <loader id="productCategoriesDl">
                 <query>
-                    <![CDATA[select e from rys_Product e]]>
+                    <![CDATA[select e from rys_ProductCategory e]]>
                 </query>
             </loader>
         </collection>
@@ -32,34 +30,31 @@
     </actions>
     <dialogMode height="600"
                 width="800"/>
-    <layout expand="productsTable" spacing="true">
+    <layout expand="productCategoriesTable" spacing="true">
         <filter id="filter"
-                dataLoader="productsDl">
+                dataLoader="productCategoriesDl">
             <properties include=".*"/>
         </filter>
-        <groupTable id="productsTable"
-                    width="100%"
-                    dataContainer="productsDc">
+        <table id="productCategoriesTable"
+               width="100%"
+               dataContainer="productCategoriesDc">
             <actions>
                 <action id="create" type="create"/>
                 <action id="edit" type="edit"/>
                 <action id="remove" type="remove"/>
             </actions>
             <columns>
-                <group>
-                    <column id="category"/>
-                </group>
                 <column id="name"/>
                 <column id="description"/>
             </columns>
             <simplePagination/>
             <buttonsPanel id="buttonsPanel"
                           alwaysVisible="true">
-                <button id="createBtn" action="productsTable.create"/>
-                <button id="editBtn" action="productsTable.edit"/>
-                <button id="removeBtn" action="productsTable.remove"/>
+                <button id="createBtn" action="productCategoriesTable.create"/>
+                <button id="editBtn" action="productCategoriesTable.edit"/>
+                <button id="removeBtn" action="productCategoriesTable.remove"/>
             </buttonsPanel>
-        </groupTable>
+        </table>
         <hbox id="lookupActions" spacing="true" visible="false">
             <button action="lookupSelectAction"/>
             <button action="lookupCancelAction"/>

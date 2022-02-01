@@ -7,10 +7,20 @@
                   class="de.diedavids.jmix.rys.product.Product">
             <fetchPlan extends="_base">
                 <property name="prices" fetchPlan="_base"/>
+                <property name="category"/>
             </fetchPlan>
             <loader/>
             <collection id="pricesDc" property="prices"/>
         </instance>
+        <collection id="productCategoriesDc"
+                    class="de.diedavids.jmix.rys.product.ProductCategory">
+            <fetchPlan extends="_base"/>
+            <loader id="productCategoriesDl">
+                <query>
+                    <![CDATA[select e from rys_ProductCategory e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <facets>
         <dataLoadCoordinator auto="true"/>
@@ -32,6 +42,7 @@
             <column width="350px">
                 <textField id="nameField" property="name"/>
                 <textArea id="descriptionField" property="description" rows="5"/>
+                <entityComboBox id="categoryField" property="category" optionsContainer="productCategoriesDc"/>
             </column>
         </form>
         <groupBox id="pricesBox" caption="msg://de.diedavids.jmix.rys.product/Product.prices">

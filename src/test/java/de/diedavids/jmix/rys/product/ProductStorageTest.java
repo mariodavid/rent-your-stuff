@@ -4,6 +4,7 @@ import de.diedavids.jmix.rys.entity.Currency;
 import de.diedavids.jmix.rys.entity.Money;
 import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import io.jmix.core.DataManager;
+import io.jmix.core.FetchPlan;
 import io.jmix.core.Id;
 import io.jmix.core.security.SystemAuthenticator;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +36,7 @@ class ProductStorageTest {
     void setUp() {
         databaseCleanup.removeAllEntities(Product.class);
         databaseCleanup.removeAllEntities(ProductPrice.class);
+        databaseCleanup.removeAllEntities(ProductCategory.class);
     }
 
     @Test
@@ -77,6 +79,42 @@ class ProductStorageTest {
                 .isPresent();
     }
 
+    @Test
+    void given_validProductWithCategory_when_save_then_productAndCategoryAssociationAreSaved() {
+        // given
+        Product product = dataManager.create(Product.class);
+        product.setName("Foo Product");
+        product.setDescription("Foo Description");
+
+        // and
+        ProductCategory productCategory = saveProductCategory("Foo Category");
+
+        // when
+        product.setCategory(productCategory);
+
+        Optional<Product> savedProduct = systemAuthenticator.withSystem(() -> {
+            dataManager.save(product);
+            return loadProductWithCategory(product);
+        });
+
+        // then
+        assertThat(savedProduct)
+                .isPresent()
+                .get()
+                .extracting("category")
+                .isEqualTo(productCategory);
+    }
+
+    @NotNull
+    private Optional<Product> loadProductWithCategory(Product product) {
+        return dataManager.load(Id.of(product))
+                .fetchPlan(productFp -> {
+                    productFp.addFetchPlan(FetchPlan.BASE);
+                    productFp.add("category", categoryFp -> categoryFp.addFetchPlan(FetchPlan.BASE));
+                })
+                .optional();
+    }
+
     @NotNull
     private ProductPrice createProductPrice(BigDecimal amount, PriceUnit priceUnit, Product product) {
         ProductPrice pricePerWeek = dataManager.create(ProductPrice.class);
@@ -87,5 +125,15 @@ class ProductStorageTest {
         pricePerWeek.setProduct(product);
         pricePerWeek.setUnit(priceUnit);
         return pricePerWeek;
+    }
+
+
+
+    @NotNull
+    private ProductCategory saveProductCategory(String name) {
+        ProductCategory productCategory = dataManager.create(ProductCategory.class);
+        productCategory.setName(name);
+        ProductCategory savedProductCategory = systemAuthenticator.withSystem(() -> dataManager.save(productCategory));
+        return savedProductCategory;
     }
 }
