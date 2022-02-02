@@ -8,9 +8,11 @@
             <fetchPlan extends="_base">
                 <property name="prices" fetchPlan="_base"/>
                 <property name="category"/>
+                <property name="stockItems" fetchPlan="_base"/>
             </fetchPlan>
             <loader/>
             <collection id="pricesDc" property="prices"/>
+            <collection id="stockItemsDc" property="stockItems"/>
         </instance>
         <collection id="productCategoriesDc"
                     class="de.diedavids.jmix.rys.product.ProductCategory">
@@ -37,32 +39,78 @@
     </actions>
     <dialogMode height="600"
                 width="800"/>
-    <layout spacing="true" expand="editActions">
-        <form id="form" dataContainer="productDc">
-            <column width="350px">
-                <textField id="nameField" property="name"/>
-                <textArea id="descriptionField" property="description" rows="5"/>
-                <entityComboBox id="categoryField" property="category" optionsContainer="productCategoriesDc"/>
-            </column>
-        </form>
-        <groupBox id="pricesBox" caption="msg://de.diedavids.jmix.rys.product/Product.prices">
-            <table id="pricesTable" dataContainer="pricesDc" width="100%" height="200px">
-                <actions>
-                    <action id="create" type="create"/>
-                    <action id="edit" type="edit"/>
-                    <action id="remove" type="remove"/>
-                </actions>
-                <columns>
-                    <column id="price" align="RIGHT"/>
-                    <column id="unit"/>
-                </columns>
-                <buttonsPanel>
-                    <button id="createBtn" action="pricesTable.create"/>
-                    <button id="editBtn" action="pricesTable.edit"/>
-                    <button id="removeBtn" action="pricesTable.remove"/>
-                </buttonsPanel>
-            </table>
-        </groupBox>
+    <layout spacing="true" expand="contentTabSheet">
+
+        <label id="productNameLabel" dataContainer="productDc" property="name" stylename="h1" />
+
+        <tabSheet id="contentTabSheet">
+            <tab id="formTab"
+                 caption="msg://de.diedavids.jmix.rys.product/generalInformation"
+                 margin="true"
+                 spacing="true"
+            >
+                <form id="form" dataContainer="productDc">
+                    <column width="350px">
+                        <textField id="nameField" property="name"/>
+                        <entityComboBox id="categoryField" property="category" optionsContainer="productCategoriesDc"/>
+                    </column>
+                </form>
+            </tab>
+            <tab id="descriptionTab"
+                 caption="msg://de.diedavids.jmix.rys.product/Product.description"
+                 margin="true"
+                 spacing="true"
+                 expand="descriptionField"
+            >
+                <textArea id="descriptionField" property="description" width="100%" dataContainer="productDc"/>
+            </tab>
+            <tab id="pricesTab"
+                 caption="msg://de.diedavids.jmix.rys.product/Product.prices"
+                 margin="true"
+                 spacing="true"
+                 expand="pricesTable"
+            >
+                <table id="pricesTable" dataContainer="pricesDc" width="100%">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="price" align="RIGHT"/>
+                        <column id="unit"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button id="createBtn" action="pricesTable.create"/>
+                        <button id="editBtn" action="pricesTable.edit"/>
+                        <button id="removeBtn" action="pricesTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+            <tab id="stockItemsTab"
+                 caption="msg://de.diedavids.jmix.rys.product/Product.stockItems"
+                 margin="true"
+                 spacing="true"
+                 expand="stockItemsTable"
+            >
+                <table id="stockItemsTable" dataContainer="stockItemsDc" width="100%">
+                    <actions>
+                        <action id="create" type="create"/>
+                        <action id="edit" type="edit"/>
+                        <action id="remove" type="remove"/>
+                    </actions>
+                    <columns>
+                        <column id="identifier"/>
+                    </columns>
+                    <buttonsPanel>
+                        <button action="stockItemsTable.create"/>
+                        <button action="stockItemsTable.edit"/>
+                        <button action="stockItemsTable.remove"/>
+                    </buttonsPanel>
+                </table>
+            </tab>
+
+        </tabSheet>
         <hbox id="editActions" spacing="true">
             <button id="commitAndCloseBtn" action="windowCommitAndClose"/>
             <button id="closeBtn" action="windowClose"/>
