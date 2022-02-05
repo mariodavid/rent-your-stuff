@@ -39,7 +39,7 @@ class ProductCategoryBrowseTest extends WebIntegrationTest {
 
         productCategory.setName("Foo ProductCategory");
 
-        dataManager.save(productCategory);
+        productCategory = dataManager.save(productCategory);
     }
 
     @Test

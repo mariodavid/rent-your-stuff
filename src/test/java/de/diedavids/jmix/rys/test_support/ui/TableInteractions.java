@@ -45,6 +45,6 @@ public class TableInteractions<E> {
     }
 
     public void create() {
-        button("createBtn").click();
+        table.getActionNN("create").actionPerform(null);
     }
 }

@@ -82,7 +82,7 @@
                     </columns>
                     <buttonsPanel>
                         <button id="createBtn" action="pricesTable.create"/>
-                        <button id="editBtn" action="pricesTable.edit"/>
+                        <button id="editBtn"   action="pricesTable.edit"/>
                         <button id="removeBtn" action="pricesTable.remove"/>
                     </buttonsPanel>
                 </table>

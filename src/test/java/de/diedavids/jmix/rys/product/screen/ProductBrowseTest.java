@@ -37,7 +37,7 @@ class ProductBrowseTest extends WebIntegrationTest {
 
         product.setName("Foo Product");
 
-        dataManager.save(product);
+        product = dataManager.save(product);
     }
 
     @Test
