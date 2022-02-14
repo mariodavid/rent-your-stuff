@@ -18,8 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CustomerBrowseTest extends WebIntegrationTest {
 
     @Autowired
-    DatabaseCleanup databaseCleanup;
-    @Autowired
     DataManager dataManager;
 
     private Customer customer;
@@ -27,9 +25,6 @@ class CustomerBrowseTest extends WebIntegrationTest {
 
     @BeforeEach
     void setUp() {
-
-        databaseCleanup.removeAllEntities(Customer.class);
-
         createInitialCustomer();
     }
 

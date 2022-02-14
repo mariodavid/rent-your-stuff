@@ -17,8 +17,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProductBrowseTest extends WebIntegrationTest {
 
     @Autowired
-    DatabaseCleanup databaseCleanup;
-    @Autowired
     DataManager dataManager;
 
     private Product product;
@@ -26,9 +24,6 @@ class ProductBrowseTest extends WebIntegrationTest {
 
     @BeforeEach
     void setUp() {
-
-        databaseCleanup.removeAllEntities(Product.class);
-
         createInitialProduct();
     }
 

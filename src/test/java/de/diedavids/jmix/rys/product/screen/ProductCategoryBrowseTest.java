@@ -19,8 +19,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProductCategoryBrowseTest extends WebIntegrationTest {
 
     @Autowired
-    DatabaseCleanup databaseCleanup;
-    @Autowired
     DataManager dataManager;
 
     private ProductCategory productCategory;
@@ -28,9 +26,6 @@ class ProductCategoryBrowseTest extends WebIntegrationTest {
 
     @BeforeEach
     void setUp() {
-
-        databaseCleanup.removeAllEntities(ProductCategory.class);
-
         createInitialProductCategory();
     }
 
