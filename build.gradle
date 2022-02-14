@@ -33,6 +33,10 @@ dependencies {
     implementation 'io.jmix.security:jmix-security-data-starter'
     implementation 'io.jmix.localfs:jmix-localfs-starter'
 
+    implementation 'io.jmix.multitenancy:jmix-multitenancy-starter'
+    implementation 'io.jmix.multitenancy:jmix-multitenancy-ui-starter'
+
+
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
 
@@ -46,6 +50,7 @@ dependencies {
 
 
     testImplementation("org.hsqldb:hsqldb")
+
 }
 
 test {

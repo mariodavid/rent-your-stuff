@@ -1,4 +1,4 @@
-package de.diedavids.jmix.rys.productCategory.screen;
+package de.diedavids.jmix.rys.product.screen;
 
 import de.diedavids.jmix.rys.product.ProductCategory;
 import de.diedavids.jmix.rys.product.screen.productcategory.ProductCategoryEdit;
@@ -26,16 +26,7 @@ class ProductCategoryEditTest extends WebIntegrationTest {
     @Autowired
     DataManager dataManager;
 
-    @Autowired
-    DatabaseCleanup databaseCleanup;
-
     FormInteractions formInteractions;
-
-
-    @BeforeEach
-    void setUp() {
-        databaseCleanup.removeAllEntities(ProductCategory.class);
-    }
 
     @Test
     void given_validProductCategory_when_saveProductCategoryThroughTheForm_then_productCategoryIsSaved(Screens screens) {

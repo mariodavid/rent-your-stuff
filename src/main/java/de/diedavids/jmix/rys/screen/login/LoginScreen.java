@@ -2,6 +2,7 @@ package de.diedavids.jmix.rys.screen.login;
 
 import io.jmix.core.MessageTools;
 import io.jmix.core.Messages;
+import io.jmix.multitenancyui.MultitenancyUiSupport;
 import io.jmix.securityui.authentication.AuthDetails;
 import io.jmix.securityui.authentication.LoginScreenSupport;
 import io.jmix.ui.JmixApp;
@@ -9,6 +10,7 @@ import io.jmix.ui.Notifications;
 import io.jmix.ui.action.Action;
 import io.jmix.ui.component.*;
 import io.jmix.ui.navigation.Route;
+import io.jmix.ui.navigation.UrlRouting;
 import io.jmix.ui.screen.*;
 import io.jmix.ui.security.UiLoginProperties;
 import org.apache.commons.lang3.StringUtils;
@@ -56,6 +58,12 @@ public class LoginScreen extends Screen {
     @Autowired
     private JmixApp app;
 
+    @Autowired
+    private MultitenancyUiSupport multitenancyUiSupport;
+
+    @Autowired
+    private UrlRouting urlRouting;
+
     private final Logger log = LoggerFactory.getLogger(LoginScreen.class);
 
     @Subscribe
@@ -102,6 +110,11 @@ public class LoginScreen extends Screen {
 
     private void login() {
         String username = usernameField.getValue();
+
+
+        // add tenantId prefix if it was provided in the URL
+        username = multitenancyUiSupport.getUsernameByUrl(username, urlRouting);
+
         String password = passwordField.getValue();
 
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {

@@ -1,6 +1,6 @@
 package de.diedavids.jmix.rys.product;
 
-import de.diedavids.jmix.rys.entity.StandardEntity;
+import de.diedavids.jmix.rys.entity.StandardTenantEntity;
 import io.jmix.core.DeletePolicy;
 import io.jmix.core.entity.annotation.OnDelete;
 import io.jmix.core.metamodel.annotation.Composition;
@@ -14,7 +14,7 @@ import java.util.List;
 @JmixEntity
 @Table(name = "RYS_PRODUCT")
 @Entity(name = "rys_Product")
-public class Product extends StandardEntity {
+public class Product extends StandardTenantEntity {
     @NotNull
     @InstanceName
     @Column(name = "NAME", nullable = false)

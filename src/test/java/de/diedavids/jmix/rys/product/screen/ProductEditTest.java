@@ -30,20 +30,9 @@ class ProductEditTest extends WebIntegrationTest {
     @Autowired
     DataManager dataManager;
 
-    @Autowired
-    DatabaseCleanup databaseCleanup;
-
     FormInteractions formInteractions;
     ScreenInteractions screenInteractions;
     ProductEdit productEdit;
-
-
-    @BeforeEach
-    void setUp() {
-        databaseCleanup.removeAllEntities(Product.class);
-        databaseCleanup.removeAllEntities(ProductCategory.class);
-    }
-
 
     @Nested
     class WithOpenedProductEditForm {

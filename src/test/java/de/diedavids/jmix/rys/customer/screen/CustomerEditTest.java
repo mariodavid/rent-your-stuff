@@ -24,16 +24,7 @@ class CustomerEditTest extends WebIntegrationTest {
     @Autowired
     DataManager dataManager;
 
-    @Autowired
-    DatabaseCleanup databaseCleanup;
-
     FormInteractions formInteractions;
-
-
-    @BeforeEach
-    void setUp() {
-        databaseCleanup.removeAllEntities(Customer.class);
-    }
 
     @Test
     void given_validCustomer_when_saveCustomerThroughTheForm_then_customerIsSaved(Screens screens) {

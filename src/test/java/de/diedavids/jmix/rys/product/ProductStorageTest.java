@@ -3,13 +3,16 @@ package de.diedavids.jmix.rys.product;
 import de.diedavids.jmix.rys.entity.Currency;
 import de.diedavids.jmix.rys.entity.Money;
 import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
+import de.diedavids.jmix.rys.test_support.TenantUserEnvironment;
 import io.jmix.core.DataManager;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.Id;
 import io.jmix.core.security.SystemAuthenticator;
+import io.jmix.multitenancy.entity.Tenant;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -22,22 +25,12 @@ import static java.math.BigDecimal.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
+@ExtendWith(TenantUserEnvironment.class)
 class ProductStorageTest {
 
     @Autowired
-    DatabaseCleanup databaseCleanup;
-    @Autowired
     DataManager dataManager;
 
-    @Autowired
-    SystemAuthenticator systemAuthenticator;
-
-    @BeforeEach
-    void setUp() {
-        databaseCleanup.removeAllEntities(Product.class);
-        databaseCleanup.removeAllEntities(ProductPrice.class);
-        databaseCleanup.removeAllEntities(ProductCategory.class);
-    }
 
     @Test
     void given_validProduct_when_save_then_productIsSaved() {
@@ -47,9 +40,7 @@ class ProductStorageTest {
         product.setDescription("Foo Description");
 
         // when
-        Product savedProduct = systemAuthenticator.withSystem(() ->
-            dataManager.save(product)
-        );
+        Product savedProduct = dataManager.save(product);
 
         // then
         assertThat(savedProduct.getId())
@@ -69,10 +60,8 @@ class ProductStorageTest {
         product.setPrices(List.of(pricePerDay, pricePerWeek));
 
         // when
-        Optional<Product> savedProduct = systemAuthenticator.withSystem(() -> {
-            dataManager.save(product, pricePerDay, pricePerWeek);
-            return dataManager.load(Id.of(product)).optional();
-        });
+        dataManager.save(product, pricePerDay, pricePerWeek);
+        Optional<Product> savedProduct =  dataManager.load(Id.of(product)).optional();
 
         // then
         assertThat(savedProduct)
@@ -92,10 +81,9 @@ class ProductStorageTest {
         // when
         product.setCategory(productCategory);
 
-        Optional<Product> savedProduct = systemAuthenticator.withSystem(() -> {
-            dataManager.save(product);
-            return loadProductWithCategory(product);
-        });
+        dataManager.save(product);
+        Optional<Product> savedProduct = loadProductWithCategory(product);
+
 
         // then
         assertThat(savedProduct)
@@ -133,7 +121,6 @@ class ProductStorageTest {
     private ProductCategory saveProductCategory(String name) {
         ProductCategory productCategory = dataManager.create(ProductCategory.class);
         productCategory.setName(name);
-        ProductCategory savedProductCategory = systemAuthenticator.withSystem(() -> dataManager.save(productCategory));
-        return savedProductCategory;
+        return dataManager.save(productCategory);
     }
 }
