@@ -2,6 +2,7 @@ package de.diedavids.jmix.rys.entity;
 
 
 import io.jmix.core.annotation.TenantId;
+import io.jmix.core.entity.annotation.SystemLevel;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 
 import javax.persistence.Column;
@@ -12,6 +13,7 @@ import javax.persistence.MappedSuperclass;
 public class StandardTenantEntity extends StandardEntity {
 
 
+    @SystemLevel
     @TenantId
     @Column(name = "TENANT")
     private String tenant;
