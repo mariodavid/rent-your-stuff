@@ -2,15 +2,11 @@ package de.diedavids.jmix.rys.product;
 
 import de.diedavids.jmix.rys.entity.Currency;
 import de.diedavids.jmix.rys.entity.Money;
-import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import de.diedavids.jmix.rys.test_support.TenantUserEnvironment;
 import io.jmix.core.DataManager;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.Id;
-import io.jmix.core.security.SystemAuthenticator;
-import io.jmix.multitenancy.entity.Tenant;
 import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,8 +16,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
-import static de.diedavids.jmix.rys.product.PriceUnit.*;
-import static java.math.BigDecimal.*;
+import static de.diedavids.jmix.rys.product.PriceUnit.DAY;
+import static de.diedavids.jmix.rys.product.PriceUnit.WEEK;
+import static java.math.BigDecimal.ONE;
+import static java.math.BigDecimal.TEN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest

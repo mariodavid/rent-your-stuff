@@ -28,11 +28,6 @@ public class Validations {
         return "{javax.validation.constraints." + errorType + ".message}";
     }
 
-    public <T> ValidationResult validateFirst(T entity) {
-        return validate(entity)
-                .get(0);
-    }
-
     public <T> void assertExactlyOneViolationWith(T entity, String attribute, String errorType) {
 
 
