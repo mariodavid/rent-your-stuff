@@ -2,11 +2,10 @@ package de.diedavids.jmix.rys.product;
 
 import de.diedavids.jmix.rys.entity.Currency;
 import de.diedavids.jmix.rys.entity.Money;
-import de.diedavids.jmix.rys.test_support.ValidationVerification;
+import de.diedavids.jmix.rys.test_support.Validations;
 import io.jmix.core.DataManager;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,7 +23,7 @@ class ProductPriceValidationTest {
     DataManager dataManager;
 
     @Autowired
-    ValidationVerification validationVerification;
+    Validations validations;
     
     private ProductPrice productPrice;
 
@@ -39,14 +38,10 @@ class ProductPriceValidationTest {
         // given
         productPrice.setUnit(PriceUnit.DAY);
         productPrice.setPrice(eur(ONE));
-        productPrice.setProduct(dataManager.create(Product.class));
+        productPrice.setProduct(someProduct());
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(productPrice);
-
-        // then
-        assertThat(violations)
-                .isEmpty();
+        // expect
+        validations.assertNoViolations(productPrice);
     }
 
     @Test
@@ -54,25 +49,13 @@ class ProductPriceValidationTest {
 
         // given
         productPrice.setPrice(eur(ONE));
-        productPrice.setProduct(dataManager.create(Product.class));
+        productPrice.setProduct(someProduct());
 
         // and
         productPrice.setUnit(null);
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(productPrice);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult unitViolation = violations.get(0);
-
-        assertThat(unitViolation.getAttribute())
-                .isEqualTo("unit");
-
-        assertThat(unitViolation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("NotNull"));
+        // expect
+        validations.assertExactlyOneViolationWith(productPrice, "unit", "NotNull");
     }
 
     @Test
@@ -80,25 +63,13 @@ class ProductPriceValidationTest {
 
         // given
         productPrice.setUnit(PriceUnit.DAY);
-        productPrice.setProduct(dataManager.create(Product.class));
+        productPrice.setProduct(someProduct());
 
         // and
         productPrice.setPrice(null);
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(productPrice);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult amountViolation = violations.get(0);
-
-        assertThat(amountViolation.getAttribute())
-                .isEqualTo("price");
-
-        assertThat(amountViolation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("NotNull"));
+        // expect
+        validations.assertExactlyOneViolationWith(productPrice, "price", "NotNull");
     }
 
     @Test
@@ -106,25 +77,13 @@ class ProductPriceValidationTest {
 
         // given
         productPrice.setUnit(PriceUnit.DAY);
-        productPrice.setProduct(dataManager.create(Product.class));
+        productPrice.setProduct(someProduct());
 
         // and
         productPrice.setPrice(eur(null));
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(productPrice);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult amountViolation = violations.get(0);
-
-        assertThat(amountViolation.getAttribute())
-                .isEqualTo("price.amount");
-
-        assertThat(amountViolation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("NotNull"));
+        // expect
+        validations.assertExactlyOneViolationWith(productPrice, "price.amount", "NotNull");
     }
 
     @Test
@@ -137,20 +96,8 @@ class ProductPriceValidationTest {
         // and
         productPrice.setProduct(null);
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(productPrice);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult amountViolation = violations.get(0);
-
-        assertThat(amountViolation.getAttribute())
-                .isEqualTo("product");
-
-        assertThat(amountViolation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("NotNull"));
+        // expect
+        validations.assertExactlyOneViolationWith(productPrice, "product", "NotNull");
     }
 
     private Money eur(BigDecimal amount) {
@@ -161,4 +108,10 @@ class ProductPriceValidationTest {
 
         return money;
     }
+
+    @NotNull
+    private Product someProduct() {
+        return dataManager.create(Product.class);
+    }
+
 }

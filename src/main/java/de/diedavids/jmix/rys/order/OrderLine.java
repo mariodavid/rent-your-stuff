@@ -1,13 +1,16 @@
 package de.diedavids.jmix.rys.order;
 
 import de.diedavids.jmix.rys.entity.StandardTenantEntity;
+import de.diedavids.jmix.rys.order.validation.ValidRentalPeriod;
 import de.diedavids.jmix.rys.product.StockItem;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
+import io.jmix.core.validation.group.UiCrossFieldChecks;
 
 import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
+import javax.validation.groups.Default;
 import java.time.LocalDateTime;
 
 @JmixEntity
@@ -16,6 +19,7 @@ import java.time.LocalDateTime;
         @Index(name = "IDX_ORDERLINE_ORDER_ID", columnList = "ORDER_ID")
 })
 @Entity(name = "rys_OrderLine")
+@ValidRentalPeriod(groups = {Default.class, UiCrossFieldChecks.class})
 public class OrderLine extends StandardTenantEntity {
     @InstanceName
     @NotNull

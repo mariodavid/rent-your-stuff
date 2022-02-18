@@ -1,10 +1,7 @@
-package de.diedavids.jmix.rys.orderLine;
+package de.diedavids.jmix.rys.order;
 
-import de.diedavids.jmix.rys.customer.Customer;
-import de.diedavids.jmix.rys.order.Order;
-import de.diedavids.jmix.rys.order.OrderLine;
 import de.diedavids.jmix.rys.product.StockItem;
-import de.diedavids.jmix.rys.test_support.ValidationVerification;
+import de.diedavids.jmix.rys.test_support.Validations;
 import io.jmix.core.DataManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,18 +9,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-class OrderLineLineValidationTest {
+class OrderLineValidationTest {
 
     @Autowired
     DataManager dataManager;
 
     @Autowired
-    ValidationVerification validationVerification;
+    Validations validations;
     
     private OrderLine orderLine;
     private final LocalDateTime NOW = LocalDateTime.now();
@@ -45,12 +41,8 @@ class OrderLineLineValidationTest {
         orderLine.setStartsAt(TOMORROW);
         orderLine.setEndsAt(IN_TWO_DAYS);
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(orderLine);
-
-        // then
-        assertThat(violations)
-                .isEmpty();
+        // expect
+        validations.assertNoViolations(orderLine);
     }
 
     @Test
@@ -64,20 +56,8 @@ class OrderLineLineValidationTest {
         // and
         orderLine.setOrder(null);
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(orderLine);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult violation = violations.get(0);
-
-        assertThat(violation.getAttribute())
-                .isEqualTo("order");
-
-        assertThat(violation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("NotNull"));
+        // expect
+        validations.assertExactlyOneViolationWith(orderLine, "order", "NotNull");
     }
 
     @Test
@@ -92,19 +72,8 @@ class OrderLineLineValidationTest {
         orderLine.setStockItem(null);
 
         // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(orderLine);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult violation = violations.get(0);
-
-        assertThat(violation.getAttribute())
-                .isEqualTo("stockItem");
-
-        assertThat(violation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("NotNull"));
+        // expect
+        validations.assertExactlyOneViolationWith(orderLine, "stockItem", "NotNull");
     }
 
     @Test
@@ -118,20 +87,8 @@ class OrderLineLineValidationTest {
         // and
         orderLine.setStartsAt(null);
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(orderLine);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult violation = violations.get(0);
-
-        assertThat(violation.getAttribute())
-                .isEqualTo("startsAt");
-
-        assertThat(violation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("NotNull"));
+        // expect
+        validations.assertOneViolationWith(orderLine, "startsAt", "NotNull");
     }
 
     @Test
@@ -145,20 +102,8 @@ class OrderLineLineValidationTest {
         // and
         orderLine.setEndsAt(null);
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(orderLine);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult violation = violations.get(0);
-
-        assertThat(violation.getAttribute())
-                .isEqualTo("endsAt");
-
-        assertThat(violation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("NotNull"));
+        // expect
+        validations.assertOneViolationWith(orderLine, "endsAt", "NotNull");
     }
 
     @Test
@@ -172,20 +117,8 @@ class OrderLineLineValidationTest {
         // and
         orderLine.setStartsAt(YESTERDAY);
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(orderLine);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult violation = violations.get(0);
-
-        assertThat(violation.getAttribute())
-                .isEqualTo("startsAt");
-
-        assertThat(violation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("FutureOrPresent"));
+        // expect
+        validations.assertOneViolationWith(orderLine, "startsAt", "FutureOrPresent");
     }
 
     @Test
@@ -199,19 +132,23 @@ class OrderLineLineValidationTest {
         // and
         orderLine.setEndsAt(YESTERDAY);
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(orderLine);
 
-        // then
-        assertThat(violations)
-                .hasSize(1);
+        // expect
+        validations.assertOneViolationWith(orderLine, "endsAt", "FutureOrPresent");
+    }
 
-        ValidationVerification.ValidationResult violation = violations.get(0);
+    @Test
+    void given_orderLineWithEndsBeforeTheStartDate_when_validate_then_oneViolationOccurs() {
 
-        assertThat(violation.getAttribute())
-                .isEqualTo("endsAt");
+        // given
+        orderLine.setOrder(dataManager.create(Order.class));
+        orderLine.setStockItem(dataManager.create(StockItem.class));
 
-        assertThat(violation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("FutureOrPresent"));
+        // and
+        orderLine.setStartsAt(IN_TWO_DAYS);
+        orderLine.setEndsAt(TOMORROW);
+
+        // expect
+        validations.assertOneViolationWith(orderLine, "ValidRentalPeriod");
     }
 }

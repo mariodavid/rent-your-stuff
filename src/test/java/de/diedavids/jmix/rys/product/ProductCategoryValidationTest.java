@@ -1,8 +1,6 @@
 package de.diedavids.jmix.rys.product;
 
-import de.diedavids.jmix.rys.entity.Currency;
-import de.diedavids.jmix.rys.entity.Money;
-import de.diedavids.jmix.rys.test_support.ValidationVerification;
+import de.diedavids.jmix.rys.test_support.Validations;
 import io.jmix.core.DataManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,10 +10,8 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import static java.math.BigDecimal.ONE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -25,7 +21,7 @@ class ProductCategoryValidationTest {
     DataManager dataManager;
 
     @Autowired
-    ValidationVerification validationVerification;
+    Validations validations;
     
     private ProductCategory category;
 
@@ -40,12 +36,8 @@ class ProductCategoryValidationTest {
         // given
         category.setName("Foo Category");
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(category);
-
-        // then
-        assertThat(violations)
-                .isEmpty();
+        // expect
+        validations.assertNoViolations(category);
     }
 
     @NullSource
@@ -56,19 +48,7 @@ class ProductCategoryValidationTest {
         // given
         category.setName(name);
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(category);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult unitViolation = violations.get(0);
-
-        assertThat(unitViolation.getAttribute())
-                .isEqualTo("name");
-
-        assertThat(unitViolation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("NotBlank"));
+        // expect
+        validations.assertExactlyOneViolationWith(category, "name", "NotBlank");
     }
 }

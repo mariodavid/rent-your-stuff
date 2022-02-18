@@ -1,6 +1,6 @@
 package de.diedavids.jmix.rys.product;
 
-import de.diedavids.jmix.rys.test_support.ValidationVerification;
+import de.diedavids.jmix.rys.test_support.Validations;
 import io.jmix.core.DataManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ class ProductValidationTest {
     DataManager dataManager;
 
     @Autowired
-    ValidationVerification validationVerification;
+    Validations validations;
     
     private Product product;
 
@@ -34,11 +34,7 @@ class ProductValidationTest {
         product.setName("validName");
 
         // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(product);
-
-        // then
-        assertThat(violations)
-                .isEmpty();
+        validations.assertNoViolations(product);
     }
 
     @Test
@@ -48,10 +44,6 @@ class ProductValidationTest {
         product.setName(null);
 
         // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(product);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
+        validations.assertExactlyOneViolationWith(product, "name", "NotNull");
     }
 }

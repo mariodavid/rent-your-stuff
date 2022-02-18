@@ -1,6 +1,6 @@
 package de.diedavids.jmix.rys.customer;
 
-import de.diedavids.jmix.rys.test_support.ValidationVerification;
+import de.diedavids.jmix.rys.test_support.Validations;
 import io.jmix.core.DataManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,7 +18,7 @@ class CustomerValidationTest {
     DataManager dataManager;
 
     @Autowired
-    ValidationVerification validationVerification;
+    Validations validations;
     
     private Customer customer;
 
@@ -28,34 +28,23 @@ class CustomerValidationTest {
     }
 
     @Test
+    void given_validCustomer_expect_noViolationOccurs() {
+
+        // given
+        customer.setEmail("valid@email.address");
+
+        // expect
+        validations.assertNoViolations(customer);
+    }
+
+    @Test
     void given_customerWithInvalidEmail_when_validateCustomer_then_oneViolationOccurs() {
 
         // given
         customer.setEmail("invalidEmailAddress");
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(customer);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-    }
-
-    @Test
-    void given_addressWithInvalidStreet_when_validateAddress_then_addressIsInvalidBecauseOfStreet() {
-
-        // given
-        customer.setEmail("invalidEmailAddress");
-
-        // when
-        ValidationVerification.ValidationResult streetViolation = validationVerification.validateFirst(customer);
-
-        // and
-        assertThat(streetViolation.getAttribute())
-                .isEqualTo("email");
-
-        assertThat(streetViolation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("Email"));
+        // expect
+        validations.assertExactlyOneViolationWith(customer, "email", "Email");
     }
 
 }
