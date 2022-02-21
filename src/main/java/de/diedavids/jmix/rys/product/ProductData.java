@@ -8,7 +8,7 @@ import lombok.Value;
 @Value
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class ProductInfo {
+public class ProductData {
     String name;
     ProductCategory category;
 }

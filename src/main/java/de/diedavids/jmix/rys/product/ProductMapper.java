@@ -6,6 +6,6 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "spring", uses = {JmixEntityFactory.class})
 public interface ProductMapper {
 
-    Product toEntity(ProductInfo productInfo);
+    Product toEntity(ProductData productData);
 }
 

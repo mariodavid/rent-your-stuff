@@ -13,7 +13,7 @@ public class ProductRepository {
     @Autowired
     DataManager dataManager;
 
-    public Product save(ProductInfo productInfo) {
-        return dataManager.save(productMapper.toEntity(productInfo));
+    public Product save(ProductData productData) {
+        return dataManager.save(productMapper.toEntity(productData));
     }
 }
