@@ -20,7 +20,6 @@ public class Orders
     @Autowired
     OrderLines orderLines;
 
-    public static final String DEFAULT_NAME = "product_name";
     public static final LocalDate DEFAULT_ORDER_DATE = LocalDate.of(2022,2,15);
 
     @Override
