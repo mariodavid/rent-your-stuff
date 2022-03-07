@@ -1,6 +1,5 @@
-package de.diedavids.jmix.rys;
+package de.diedavids.jmix.rys.entity;
 
-import de.diedavids.jmix.rys.entity.StandardEntity;
 import io.jmix.core.DataManager;
 import org.mapstruct.TargetType;
 import org.springframework.beans.factory.annotation.Autowired;

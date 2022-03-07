@@ -1,8 +1,6 @@
 package de.diedavids.jmix.rys.customer;
 
-import de.diedavids.jmix.rys.JmixEntityFactory;
-import de.diedavids.jmix.rys.order.OrderLine;
-import de.diedavids.jmix.rys.order.OrderLineData;
+import de.diedavids.jmix.rys.entity.JmixEntityFactory;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring", uses = {JmixEntityFactory.class})
