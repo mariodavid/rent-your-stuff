@@ -3,6 +3,9 @@ package de.diedavids.jmix.rys.product;
 import de.diedavids.jmix.rys.entity.Currency;
 import de.diedavids.jmix.rys.entity.Money;
 import de.diedavids.jmix.rys.test_support.TenantUserEnvironment;
+import de.diedavids.jmix.rys.test_support.test_data.ProductCategories;
+import de.diedavids.jmix.rys.test_support.test_data.ProductPrices;
+import de.diedavids.jmix.rys.test_support.test_data.Products;
 import io.jmix.core.DataManager;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.Id;
@@ -16,6 +19,7 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import static de.diedavids.jmix.rys.entity.Currency.EUR;
 import static de.diedavids.jmix.rys.product.PriceUnit.DAY;
 import static de.diedavids.jmix.rys.product.PriceUnit.WEEK;
 import static java.math.BigDecimal.ONE;
@@ -29,62 +33,75 @@ class ProductStorageTest {
     @Autowired
     DataManager dataManager;
 
+    @Autowired
+    Products products;
+    @Autowired
+    ProductPrices productPrices;
+    @Autowired
+    ProductCategories productCategories;
 
     @Test
     void given_validProduct_when_save_then_productIsSaved() {
-        // given
-        Product product = dataManager.create(Product.class);
-        product.setName("Foo Product");
-        product.setDescription("Foo Description");
 
         // when
-        Product savedProduct = dataManager.save(product);
+        Product product = products.save(
+                products.defaultData()
+                        .name("Foo Product")
+                        .build()
+        );
 
         // then
-        assertThat(savedProduct.getId())
+        assertThat(product.getId())
                 .isNotNull();
     }
 
     @Test
     void given_validProductWithPrices_when_save_then_productAndPricesAreSaved() {
         // given
-        Product product = dataManager.create(Product.class);
-        product.setName("Foo Product");
-        product.setDescription("Foo Description");
+        Product product = products.saveDefault();
 
         // and
-        ProductPrice pricePerDay = createProductPrice(ONE, DAY, product);
-        ProductPrice pricePerWeek = createProductPrice(TEN, WEEK, product);
-        product.setPrices(List.of(pricePerDay, pricePerWeek));
+        ProductPrice pricePerDay = productPrices.save(
+                productPrices.defaultData()
+                        .product(product)
+                        .price(productPrices.money(ONE, EUR))
+                        .unit(DAY)
+                        .build()
+        );
+        ProductPrice pricePerWeek = productPrices.save(
+                productPrices.defaultData()
+                        .product(product)
+                        .price(productPrices.money(TEN, EUR))
+                        .unit(WEEK)
+                        .build()
+        );
 
         // when
-        dataManager.save(product, pricePerDay, pricePerWeek);
         Optional<Product> savedProduct =  dataManager.load(Id.of(product)).optional();
 
         // then
         assertThat(savedProduct)
                 .isPresent();
+
+        assertThat(savedProduct.get().getPrices())
+                .containsExactlyInAnyOrder(pricePerDay, pricePerWeek);
     }
 
     @Test
     void given_validProductWithCategory_when_save_then_productAndCategoryAssociationAreSaved() {
-        // given
-        Product product = dataManager.create(Product.class);
-        product.setName("Foo Product");
-        product.setDescription("Foo Description");
 
-        // and
-        ProductCategory productCategory = saveProductCategory("Foo Category");
+        // given
+        ProductCategory productCategory = productCategories.saveDefault();
 
         // when
-        product.setCategory(productCategory);
-
-        dataManager.save(product);
-        Optional<Product> savedProduct = loadProductWithCategory(product);
-
+        Product product = products.save(
+                products.defaultData()
+                        .category(productCategory)
+                        .build()
+        );
 
         // then
-        assertThat(savedProduct)
+        assertThat(loadProductWithCategory(product))
                 .isPresent()
                 .get()
                 .extracting("category")
@@ -99,26 +116,5 @@ class ProductStorageTest {
                     productFp.add("category", categoryFp -> categoryFp.addFetchPlan(FetchPlan.BASE));
                 })
                 .optional();
-    }
-
-    @NotNull
-    private ProductPrice createProductPrice(BigDecimal amount, PriceUnit priceUnit, Product product) {
-        ProductPrice pricePerWeek = dataManager.create(ProductPrice.class);
-        Money money = dataManager.create(Money.class);
-        money.setCurrency(Currency.EUR);
-        money.setAmount(amount);
-        pricePerWeek.setPrice(money);
-        pricePerWeek.setProduct(product);
-        pricePerWeek.setUnit(priceUnit);
-        return pricePerWeek;
-    }
-
-
-
-    @NotNull
-    private ProductCategory saveProductCategory(String name) {
-        ProductCategory productCategory = dataManager.create(ProductCategory.class);
-        productCategory.setName(name);
-        return dataManager.save(productCategory);
     }
 }

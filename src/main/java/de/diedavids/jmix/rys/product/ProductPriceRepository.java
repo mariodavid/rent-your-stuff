@@ -5,16 +5,16 @@ import io.jmix.core.DataManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("rys_ProductRepository")
-public class ProductRepository implements EntityRepository<ProductData, Product> {
+@Component("rys_ProductPriceRepository")
+public class ProductPriceRepository implements EntityRepository<ProductPriceData, ProductPrice> {
 
     @Autowired
-    ProductMapper mapper;
+    ProductPriceMapper mapper;
 
     @Autowired
     DataManager dataManager;
 
-    public Product save(ProductData productData) {
+    public ProductPrice save(ProductPriceData productData) {
         return dataManager.save(mapper.toEntity(productData));
     }
 }
