@@ -33,3 +33,7 @@ A video series about how to build a real world app in the rental business with J
 * Feature Requests via GH issues / YouTube comments
 
 
+## Links
+
+* [YouTube Playlist](https://www.youtube.com/playlist?list=PLJ0nYE0NtQxbdNAZuzoMa9LvznsBQi38X)
+* [Running application](https://rent-your-stuff-staging.herokuapp.com/)
