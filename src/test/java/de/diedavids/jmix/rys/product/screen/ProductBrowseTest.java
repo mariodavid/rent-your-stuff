@@ -1,7 +1,7 @@
 package de.diedavids.jmix.rys.product.screen;
 
 import de.diedavids.jmix.rys.product.Product;
-import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
+import de.diedavids.jmix.rys.test_support.test_data.Products;
 import de.diedavids.jmix.rys.test_support.ui.ScreenInteractions;
 import de.diedavids.jmix.rys.test_support.ui.TableInteractions;
 import de.diedavids.jmix.rys.test_support.ui.WebIntegrationTest;
@@ -20,19 +20,13 @@ class ProductBrowseTest extends WebIntegrationTest {
     DataManager dataManager;
 
     private Product product;
+    @Autowired
+    private Products products;
 
 
     @BeforeEach
     void setUp() {
-        createInitialProduct();
-    }
-
-    private void createInitialProduct() {
-        product = dataManager.create(Product.class);
-
-        product.setName("Foo Product");
-
-        product = dataManager.save(product);
+        product = products.saveDefault();
     }
 
     @Test

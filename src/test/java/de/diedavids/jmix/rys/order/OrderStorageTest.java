@@ -38,8 +38,6 @@ public class OrderStorageTest {
 
 
     private final LocalDate TODAY = LocalDate.now();
-    private final LocalDate YESTERDAY = TODAY.minusDays(1);
-
 
     private final LocalDateTime IN_TWO_DAYS = LocalDateTime.now().plusDays(2);
     private final LocalDateTime IN_THREE_DAYS = LocalDateTime.now().plusDays(3);

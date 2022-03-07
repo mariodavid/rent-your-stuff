@@ -10,6 +10,10 @@ assertjGenerator {
             'de.diedavids.jmix.rys.order.OrderLine',
             'de.diedavids.jmix.rys.product.Product',
             'de.diedavids.jmix.rys.product.ProductCategory',
+            'de.diedavids.jmix.rys.product.ProductPrice',
+            'de.diedavids.jmix.rys.customer.Customer',
+            'de.diedavids.jmix.rys.entity.Address',
+            'de.diedavids.jmix.rys.entity.Money',
     ]
 }
 

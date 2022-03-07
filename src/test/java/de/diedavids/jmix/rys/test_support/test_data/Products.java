@@ -8,7 +8,7 @@ import io.jmix.core.DataManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("rys_Products")
+@Component
 public class Products
         implements TestDataProvisioning<ProductData, ProductData.ProductDataBuilder, Product> {
 
@@ -16,7 +16,7 @@ public class Products
     DataManager dataManager;
 
     @Autowired
-    ProductMapper mapper;
+    ProductMapper productMapper;
 
     @Autowired
     ProductRepository productRepository;
@@ -33,6 +33,16 @@ public class Products
     @Override
     public Product save(ProductData productData)  {
         return productRepository.save(productData);
+    }
+
+    @Override
+    public Product create(ProductData productData) {
+        return productMapper.toEntity(productData);
+    }
+
+    @Override
+    public Product createDefault() {
+        return create(defaultData().build());
     }
 
     @Override

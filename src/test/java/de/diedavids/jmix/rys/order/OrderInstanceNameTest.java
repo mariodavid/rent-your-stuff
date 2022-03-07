@@ -2,11 +2,10 @@ package de.diedavids.jmix.rys.order;
 
 import de.diedavids.jmix.rys.customer.Customer;
 import de.diedavids.jmix.rys.test_support.TenantUserEnvironment;
-import de.diedavids.jmix.rys.test_support.Validations;
+import de.diedavids.jmix.rys.test_support.test_data.Customers;
+import de.diedavids.jmix.rys.test_support.test_data.Orders;
 import io.jmix.core.DataManager;
 import io.jmix.core.MetadataTools;
-import io.jmix.core.security.SystemAuthenticator;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,34 +20,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 class OrderInstanceNameTest {
 
     @Autowired
-    DataManager dataManager;
-    @Autowired
     MetadataTools metadataTools;
-    
-    private Order order;
 
-    @BeforeEach
-    void setUp() {
-        order = dataManager.create(Order.class);
-    }
+    @Autowired
+    private Orders orders;
+    @Autowired
+    private Customers customers;
+
 
     @Test
     void given_orderContainsCustomerAndOrderDate_expect_instanceNameContainsFormattedValues() {
 
         // given
-        Customer customer = dataManager.create(Customer.class);
-        customer.setFirstName("Mr.");
-        customer.setLastName("Miyagi");
-        order.setCustomer(customer);
+        Customer customer = customers.save(
+                customers.defaultData()
+                        .firstName("Mr.")
+                        .lastName("Miyagi")
+                        .build()
+        );
 
         // and
-        order.setOrderDate(LocalDate.parse("2022-01-01"));
+        Order order = orders.create(
+                orders.defaultData()
+                        .customer(customer)
+                        .orderDate(LocalDate.parse("2022-01-01"))
+                        .build()
+        );
 
-        // when
-        String orderInstanceName = metadataTools.getInstanceName(order);
-
-        // then
-        assertThat(orderInstanceName)
+        // expect
+        assertThat(metadataTools.getInstanceName(order))
                 .isEqualTo("Mr. Miyagi - 01/01/2022");
     }
 }

@@ -2,6 +2,7 @@ package de.diedavids.jmix.rys.test_support.test_data;
 
 import de.diedavids.jmix.rys.customer.Customer;
 import de.diedavids.jmix.rys.customer.CustomerData;
+import de.diedavids.jmix.rys.customer.CustomerMapper;
 import de.diedavids.jmix.rys.customer.CustomerRepository;
 import de.diedavids.jmix.rys.entity.Address;
 import de.diedavids.jmix.rys.entity.AddressData;
@@ -14,7 +15,7 @@ import org.springframework.stereotype.Component;
 import java.time.LocalDate;
 import java.util.List;
 
-@Component("rys_Customers")
+@Component
 public class Customers
         implements TestDataProvisioning<CustomerData, CustomerData.CustomerDataBuilder, Customer> {
 
@@ -22,6 +23,8 @@ public class Customers
     CustomerRepository customerRepository;
     @Autowired
     AddressMapper addressMapper;
+    @Autowired
+    CustomerMapper customerMapper;
 
     public static final String DEFAULT_ORDER_DATE = "first_name";
     public static final String DEFAULT_LAST_NAME = "last_name";
@@ -47,9 +50,20 @@ public class Customers
                 .build());
     }
 
+
     @Override
     public Customer save(CustomerData customerData)  {
         return customerRepository.save(customerData);
+    }
+
+    @Override
+    public Customer create(CustomerData customerData) {
+        return customerMapper.toEntity(customerData);
+    }
+
+    @Override
+    public Customer createDefault() {
+        return create(defaultData().build());
     }
 
     @Override

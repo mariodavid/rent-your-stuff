@@ -5,7 +5,7 @@ import io.jmix.core.DataManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component("rys_StockItems")
+@Component
 public class StockItems
         implements TestDataProvisioning<StockItemData, StockItemData.StockItemDataBuilder, StockItem> {
 
@@ -16,6 +16,8 @@ public class StockItems
     StockItemRepository repository;
 
     public static String DEFAULT_IDENTIFIER = "stock_item_identifier";
+    @Autowired
+    private StockItemMapper stockItemMapper;
 
     @Override
     public StockItemData.StockItemDataBuilder defaultData() {
@@ -27,6 +29,16 @@ public class StockItems
     @Override
     public StockItem save(StockItemData stockItemData) {
         return repository.save(stockItemData);
+    }
+
+    @Override
+    public StockItem create(StockItemData stockItemData) {
+        return stockItemMapper.toEntity(stockItemData);
+    }
+
+    @Override
+    public StockItem createDefault() {
+        return create(defaultData().build());
     }
 
     @Override

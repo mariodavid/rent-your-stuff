@@ -3,7 +3,7 @@ package de.diedavids.jmix.rys.product.screen;
 import de.diedavids.jmix.rys.product.ProductCategory;
 import de.diedavids.jmix.rys.product.screen.productcategory.ProductCategoryBrowse;
 import de.diedavids.jmix.rys.product.screen.productcategory.ProductCategoryEdit;
-import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
+import de.diedavids.jmix.rys.test_support.test_data.ProductCategories;
 import de.diedavids.jmix.rys.test_support.ui.ScreenInteractions;
 import de.diedavids.jmix.rys.test_support.ui.TableInteractions;
 import de.diedavids.jmix.rys.test_support.ui.WebIntegrationTest;
@@ -22,19 +22,13 @@ class ProductCategoryBrowseTest extends WebIntegrationTest {
     DataManager dataManager;
 
     private ProductCategory productCategory;
+    @Autowired
+    private ProductCategories productCategories;
 
 
     @BeforeEach
     void setUp() {
-        createInitialProductCategory();
-    }
-
-    private void createInitialProductCategory() {
-        productCategory = dataManager.create(ProductCategory.class);
-
-        productCategory.setName("Foo ProductCategory");
-
-        productCategory = dataManager.save(productCategory);
+        productCategory = productCategories.saveDefault();
     }
 
     @Test

@@ -1,7 +1,5 @@
 package de.diedavids.jmix.rys.product;
 
-import de.diedavids.jmix.rys.entity.Currency;
-import de.diedavids.jmix.rys.entity.Money;
 import de.diedavids.jmix.rys.test_support.TenantUserEnvironment;
 import de.diedavids.jmix.rys.test_support.test_data.ProductCategories;
 import de.diedavids.jmix.rys.test_support.test_data.ProductPrices;
@@ -15,8 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
-import java.util.List;
 import java.util.Optional;
 
 import static de.diedavids.jmix.rys.entity.Currency.EUR;
@@ -31,14 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProductStorageTest {
 
     @Autowired
-    DataManager dataManager;
-
+    private DataManager dataManager;
     @Autowired
-    Products products;
+    private Products products;
     @Autowired
-    ProductPrices productPrices;
+    private ProductPrices productPrices;
     @Autowired
-    ProductCategories productCategories;
+    private ProductCategories productCategories;
 
     @Test
     void given_validProduct_when_save_then_productIsSaved() {

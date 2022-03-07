@@ -1,7 +1,9 @@
 package de.diedavids.jmix.rys.customer.screen;
 
 import de.diedavids.jmix.rys.customer.Customer;
+import de.diedavids.jmix.rys.customer.CustomerData;
 import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
+import de.diedavids.jmix.rys.test_support.test_data.Customers;
 import de.diedavids.jmix.rys.test_support.ui.FormInteractions;
 import de.diedavids.jmix.rys.test_support.ui.ScreenInteractions;
 import de.diedavids.jmix.rys.test_support.ui.WebIntegrationTest;
@@ -24,8 +26,10 @@ class CustomerEditTest extends WebIntegrationTest {
     @Autowired
     DataManager dataManager;
 
-    FormInteractions formInteractions;
+    @Autowired
+    private Customers customers;
 
+    FormInteractions formInteractions;
     @Test
     void given_validCustomer_when_saveCustomerThroughTheForm_then_customerIsSaved(Screens screens) {
 
@@ -35,12 +39,11 @@ class CustomerEditTest extends WebIntegrationTest {
         formInteractions = FormInteractions.of(customerEdit);
 
         // and:
-        String firstName = "Foo" + UUID.randomUUID();
+        CustomerData customerData = customers.defaultData().build();
 
-        formInteractions.setTextFieldValue("firstNameField", firstName);
-        String expectedLastName = "Bar";
-        formInteractions.setTextFieldValue("lastNameField", expectedLastName);
-        formInteractions.setTextFieldValue("addressStreetField", "Foo Street 123");
+        formInteractions.setTextFieldValue("firstNameField", customerData.getFirstName());
+        formInteractions.setTextFieldValue("lastNameField", customerData.getLastName());
+        formInteractions.setTextFieldValue("addressStreetField", customerData.getAddress().getStreet());
 
         // when:
         OperationResult operationResult = formInteractions.saveForm();
@@ -49,13 +52,13 @@ class CustomerEditTest extends WebIntegrationTest {
                 .isEqualTo(OperationResult.success());
 
         // then:
-        Optional<Customer> savedCustomer = findCustomerByAttribute("firstName", firstName);
+        Optional<Customer> savedCustomer = findCustomerByAttribute("firstName", customerData.getFirstName());
 
         assertThat(savedCustomer)
                 .isPresent()
                 .get()
                 .extracting("lastName")
-                .isEqualTo(expectedLastName);
+                .isEqualTo(customerData.getLastName());
 
     }
 
@@ -68,9 +71,11 @@ class CustomerEditTest extends WebIntegrationTest {
         formInteractions = FormInteractions.of(customerEdit);
 
         // and:
-        String firstName = "Foo" + UUID.randomUUID();
+        CustomerData customerData = customers.defaultData().build();
 
-        formInteractions.setTextFieldValue("firstNameField", firstName);
+        formInteractions.setTextFieldValue("firstNameField", customerData.getFirstName());
+
+        // and:
         String invalidStreetAddress = "";
         formInteractions.setTextFieldValue("addressStreetField", invalidStreetAddress);
 
@@ -81,7 +86,7 @@ class CustomerEditTest extends WebIntegrationTest {
                 .isEqualTo(OperationResult.fail());
 
         // then:
-        Optional<Customer> savedCustomer = findCustomerByAttribute("firstName", firstName);
+        Optional<Customer> savedCustomer = findCustomerByAttribute("firstName", customerData.getFirstName());
 
         assertThat(savedCustomer)
                 .isNotPresent();

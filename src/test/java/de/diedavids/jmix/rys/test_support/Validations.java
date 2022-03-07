@@ -98,5 +98,10 @@ public class Validations {
         public boolean matches(String errorType) {
             return getErrorType().equals(errorType);
         }
+
+        @Override
+        public String toString() {
+            return violation.toString();
+        }
     }
 }

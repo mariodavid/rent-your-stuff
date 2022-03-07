@@ -3,6 +3,7 @@ package de.diedavids.jmix.rys.product;
 import de.diedavids.jmix.rys.entity.Currency;
 import de.diedavids.jmix.rys.entity.Money;
 import de.diedavids.jmix.rys.test_support.Validations;
+import de.diedavids.jmix.rys.test_support.test_data.ProductPrices;
 import io.jmix.core.DataManager;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,25 +21,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProductPriceValidationTest {
 
     @Autowired
-    DataManager dataManager;
+    private DataManager dataManager;
 
     @Autowired
-    Validations validations;
-    
-    private ProductPrice productPrice;
+    private Validations validations;
 
-    @BeforeEach
-    void setUp() {
-        productPrice = dataManager.create(ProductPrice.class);
-    }
+    @Autowired
+    private ProductPrices productPrices;
 
     @Test
     void given_validProductPrice_when_validate_then_noViolationOccurs() {
 
         // given
-        productPrice.setUnit(PriceUnit.DAY);
-        productPrice.setPrice(eur(ONE));
-        productPrice.setProduct(someProduct());
+        ProductPrice productPrice = productPrices.createDefault();
 
         // expect
         validations.assertNoViolations(productPrice);
@@ -48,11 +43,11 @@ class ProductPriceValidationTest {
     void given_productPriceWithoutUnit_when_validate_then_oneViolationOccurs() {
 
         // given
-        productPrice.setPrice(eur(ONE));
-        productPrice.setProduct(someProduct());
-
-        // and
-        productPrice.setUnit(null);
+        ProductPrice productPrice = productPrices.create(
+                productPrices.defaultData()
+                        .unit(null)
+                        .build()
+        );
 
         // expect
         validations.assertExactlyOneViolationWith(productPrice, "unit", "NotNull");
@@ -62,11 +57,11 @@ class ProductPriceValidationTest {
     void given_productPriceWithoutPrice_when_validate_then_oneViolationOccurs() {
 
         // given
-        productPrice.setUnit(PriceUnit.DAY);
-        productPrice.setProduct(someProduct());
-
-        // and
-        productPrice.setPrice(null);
+        ProductPrice productPrice = productPrices.create(
+                productPrices.defaultData()
+                        .price(null)
+                        .build()
+        );
 
         // expect
         validations.assertExactlyOneViolationWith(productPrice, "price", "NotNull");
@@ -76,11 +71,11 @@ class ProductPriceValidationTest {
     void given_productPriceWithoutPriceAmount_when_validate_then_oneViolationOccurs() {
 
         // given
-        productPrice.setUnit(PriceUnit.DAY);
-        productPrice.setProduct(someProduct());
-
-        // and
-        productPrice.setPrice(eur(null));
+        ProductPrice productPrice = productPrices.create(
+                productPrices.defaultData()
+                        .price(eur(null))
+                        .build()
+        );
 
         // expect
         validations.assertExactlyOneViolationWith(productPrice, "price.amount", "NotNull");
@@ -90,11 +85,11 @@ class ProductPriceValidationTest {
     void given_productPriceWithoutProduct_when_validate_then_oneViolationOccurs() {
 
         // given
-        productPrice.setUnit(PriceUnit.DAY);
-        productPrice.setPrice(eur(ONE));
-
-        // and
-        productPrice.setProduct(null);
+        ProductPrice productPrice = productPrices.create(
+                productPrices.defaultData()
+                        .product(null)
+                        .build()
+        );
 
         // expect
         validations.assertExactlyOneViolationWith(productPrice, "product", "NotNull");
@@ -108,10 +103,4 @@ class ProductPriceValidationTest {
 
         return money;
     }
-
-    @NotNull
-    private Product someProduct() {
-        return dataManager.create(Product.class);
-    }
-
 }

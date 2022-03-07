@@ -3,7 +3,9 @@ package de.diedavids.jmix.rys.product.screen;
 import de.diedavids.jmix.rys.product.*;
 import de.diedavids.jmix.rys.product.screen.productprice.ProductPriceEdit;
 import de.diedavids.jmix.rys.product.screen.stockitem.StockItemEdit;
-import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
+import de.diedavids.jmix.rys.test_support.test_data.ProductCategories;
+import de.diedavids.jmix.rys.test_support.test_data.ProductPrices;
+import de.diedavids.jmix.rys.test_support.test_data.Products;
 import de.diedavids.jmix.rys.test_support.ui.FormInteractions;
 import de.diedavids.jmix.rys.test_support.ui.ScreenInteractions;
 import de.diedavids.jmix.rys.test_support.ui.TableInteractions;
@@ -18,17 +20,23 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static de.diedavids.jmix.rys.order.Assertions.assertThat;
+
 
 class ProductEditTest extends WebIntegrationTest {
 
     @Autowired
-    DataManager dataManager;
+    private DataManager dataManager;
+    @Autowired
+    private Products products;
+    @Autowired
+    private ProductPrices productPrices;
+    @Autowired
+    private ProductCategories productCategories;
 
     FormInteractions formInteractions;
     ScreenInteractions screenInteractions;
@@ -46,8 +54,8 @@ class ProductEditTest extends WebIntegrationTest {
         void given_validProduct_when_saveProductThroughTheForm_then_productIsSaved() {
 
             // given:
-            String name = "Foo Product" + UUID.randomUUID();
-            formInteractions.setTextFieldValue("nameField", name);
+            ProductData productData = products.defaultData().build();
+            formInteractions.setTextFieldValue("nameField", productData.getName());
 
             // when:
             OperationResult operationResult = formInteractions.saveForm();
@@ -56,7 +64,7 @@ class ProductEditTest extends WebIntegrationTest {
                     .isEqualTo(OperationResult.success());
 
             // then:
-            Optional<Product> savedProduct = findProductByAttribute("name", name);
+            Optional<Product> savedProduct = findProductByAttribute("name", productData.getName());
 
             assertThat(savedProduct)
                     .isPresent();
@@ -67,8 +75,8 @@ class ProductEditTest extends WebIntegrationTest {
         void given_validProductWithPrice_when_saveProductThroughTheForm_then_productAndPriceAreSaved() {
 
             // given:
-            String name = "Foo Product" + UUID.randomUUID();
-            formInteractions.setTextFieldValue("nameField", name);
+            ProductData productData = products.defaultData().build();
+            formInteractions.setTextFieldValue("nameField", productData.getName());
 
             // and:
             TableInteractions<ProductPrice> pricesTable = TableInteractions.of(productEdit, ProductPrice.class, "pricesTable");
@@ -78,11 +86,11 @@ class ProductEditTest extends WebIntegrationTest {
             ProductPriceEdit productPriceEdit = screenInteractions.findOpenScreen(ProductPriceEdit.class);
             FormInteractions priceForm = FormInteractions.of(productPriceEdit);
 
-            BigDecimal expectedAmount = BigDecimal.TEN;
-            PriceUnit expectedUnit = PriceUnit.DAY;
+            ProductPriceData productPriceData = productPrices.defaultData().build();
 
-            priceForm.setCurrencyFieldValue("priceAmountField", expectedAmount);
-            priceForm.setEnumFieldValue("unitField", expectedUnit);
+
+            priceForm.setCurrencyFieldValue("priceAmountField", productPriceData.getPrice().getAmount());
+            priceForm.setEnumFieldValue("unitField", productPriceData.getUnit());
 
             // when:
             OperationResult priceFormResult = priceForm.saveForm();
@@ -98,7 +106,7 @@ class ProductEditTest extends WebIntegrationTest {
                     .isEqualTo(OperationResult.success());
 
             // then:
-            Optional<Product> savedProduct = findProductByAttribute("name", name);
+            Optional<Product> savedProduct = findProductByAttribute("name", productData.getName());
 
             assertThat(savedProduct)
                     .isPresent();
@@ -114,10 +122,11 @@ class ProductEditTest extends WebIntegrationTest {
             ProductPrice price = prices.get(0);
 
             assertThat(price.getPrice().getAmount())
-                    .isEqualByComparingTo(expectedAmount);
+                    .isEqualByComparingTo(productPriceData.getPrice().getAmount());
 
-            assertThat(price.getUnit())
-                    .isEqualTo(expectedUnit);
+            assertThat(price)
+                    .hasUnit(productPriceData.getUnit());
+
         }
 
         @Test
@@ -208,8 +217,8 @@ class ProductEditTest extends WebIntegrationTest {
 
         @BeforeEach
         void setUp(Screens screens) {
-            productCategory1 = saveProductCategory("Product Category 1");
-            productCategory2 = saveProductCategory("Product Category 2");
+            productCategory1 = productCategories.saveDefault();
+            productCategory2 = productCategories.saveDefault();
 
             initProductEditForm(screens);
         }
@@ -228,8 +237,8 @@ class ProductEditTest extends WebIntegrationTest {
         void given_validProductWithCategory_when_saveProductThroughTheForm_then_productAndCategoryAssociationAreSaved(Screens screens) {
 
             // given:
-            String name = "Foo Product" + UUID.randomUUID();
-            formInteractions.setTextFieldValue("nameField", name);
+            ProductData productData = products.defaultData().build();
+            formInteractions.setTextFieldValue("nameField", productData.getName());
 
             // and:
             formInteractions.setEntityComboxBoxFieldValue("categoryField", productCategory1, ProductCategory.class);
@@ -241,7 +250,7 @@ class ProductEditTest extends WebIntegrationTest {
                     .isEqualTo(OperationResult.success());
 
             // then:
-            Optional<Product> savedProduct = findProductByAttribute("name", name);
+            Optional<Product> savedProduct = findProductByAttribute("name", productData.getName());
 
             assertThat(savedProduct)
                     .isPresent()
@@ -263,12 +272,5 @@ class ProductEditTest extends WebIntegrationTest {
         return dataManager.load(Product.class)
                 .condition(PropertyCondition.equal(attribute, value))
                 .optional();
-    }
-
-    @NotNull
-    private ProductCategory saveProductCategory(String name) {
-        ProductCategory productCategory = dataManager.create(ProductCategory.class);
-        productCategory.setName(name);
-        return dataManager.save(productCategory);
     }
 }

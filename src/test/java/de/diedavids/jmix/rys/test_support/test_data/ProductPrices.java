@@ -7,25 +7,30 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 
-@Component("rys_ProductPrices")
+@Component
 public class ProductPrices
         implements TestDataProvisioning<ProductPriceData, ProductPriceData.ProductPriceDataBuilder, ProductPrice> {
 
     @Autowired
-    ProductPriceRepository repository;
+    private ProductPriceRepository repository;
     @Autowired
-    MoneyMapper moneyMapper;
+    private MoneyMapper moneyMapper;
+    @Autowired
+    private ProductPriceMapper productPriceMapper;
+    @Autowired
+    private Products products;
 
     public static final PriceUnit DEFAULT_PRICE_UNIT = PriceUnit.DAY;;
     public static final Currency DEFAULT_CURRENCY = Currency.EUR;
     public static final BigDecimal DEFAULT_AMOUNT = BigDecimal.TEN;
 
+
     @Override
     public ProductPriceData.ProductPriceDataBuilder defaultData() {
         return ProductPriceData.builder()
+                .product(products.createDefault())
                 .unit(DEFAULT_PRICE_UNIT)
-                .price(defaultPrice())
-                .product(null);
+                .price(defaultPrice());
     }
 
     public Money defaultPrice() {
@@ -35,6 +40,16 @@ public class ProductPrices
     @Override
     public ProductPrice save(ProductPriceData productData)  {
         return repository.save(productData);
+    }
+
+    @Override
+    public ProductPrice create(ProductPriceData productPriceData) {
+        return productPriceMapper.toEntity(productPriceData);
+    }
+
+    @Override
+    public ProductPrice createDefault() {
+        return create(defaultData().build());
     }
 
     @Override
