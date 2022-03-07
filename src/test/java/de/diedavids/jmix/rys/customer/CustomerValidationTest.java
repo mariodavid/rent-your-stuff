@@ -1,13 +1,10 @@
 package de.diedavids.jmix.rys.customer;
 
-import de.diedavids.jmix.rys.test_support.ValidationVerification;
-import io.jmix.core.DataManager;
-import org.junit.jupiter.api.BeforeEach;
+import de.diedavids.jmix.rys.test_support.Validations;
+import de.diedavids.jmix.rys.test_support.test_data.Customers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -15,47 +12,37 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CustomerValidationTest {
 
     @Autowired
-    DataManager dataManager;
-
+    Validations validations;
     @Autowired
-    ValidationVerification validationVerification;
-    
-    private Customer customer;
+    private Customers customers;
 
-    @BeforeEach
-    void setUp() {
-        customer = dataManager.create(Customer.class);
+
+    @Test
+    void given_validCustomer_expect_noViolationOccurs() {
+
+        // given
+        Customer customer = customerWithEmail("valid@email.address");
+
+        // expect
+        validations.assertNoViolations(customer);
     }
 
     @Test
     void given_customerWithInvalidEmail_when_validateCustomer_then_oneViolationOccurs() {
 
         // given
-        customer.setEmail("invalidEmailAddress");
+        Customer customer = customerWithEmail("invalidEmailAddress");
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(customer);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
+        // expect
+        validations.assertExactlyOneViolationWith(customer, "email", "Email");
     }
 
-    @Test
-    void given_addressWithInvalidStreet_when_validateAddress_then_addressIsInvalidBecauseOfStreet() {
 
-        // given
-        customer.setEmail("invalidEmailAddress");
-
-        // when
-        ValidationVerification.ValidationResult streetViolation = validationVerification.validateFirst(customer);
-
-        // and
-        assertThat(streetViolation.getAttribute())
-                .isEqualTo("email");
-
-        assertThat(streetViolation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("Email"));
+    private Customer customerWithEmail(String email) {
+        return customers.create(
+                customers.defaultData()
+                        .email(email)
+                        .build()
+        );
     }
-
 }

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.3.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1" author="rys">
+        <createTable tableName="RYS_ORDER">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_RYS_ORDER"/>
+            </column>
+            <column name="TENANT" type="VARCHAR(255)"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+            <column name="ORDER_DATE" type="DATE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CUSTOMER_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="2" author="rys">
+        <createTable tableName="RYS_ORDER_LINE">
+            <column name="ID" type="UUID">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="PK_RYS_ORDER_LINE"/>
+            </column>
+            <column name="TENANT" type="VARCHAR(255)"/>
+            <column name="VERSION" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="CREATED_BY" type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATETIME"/>
+            <column name="LAST_MODIFIED_BY" type="VARCHAR(255)"/>
+            <column name="LAST_MODIFIED_DATE" type="DATETIME"/>
+            <column name="DELETED_BY" type="VARCHAR(255)"/>
+            <column name="DELETED_DATE" type="DATETIME"/>
+            <column name="STOCK_ITEM_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ORDER_ID" type="UUID">
+                <constraints nullable="false"/>
+            </column>
+            <column name="STARTS_AT" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ENDS_AT" type="DATETIME">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="3" author="rys">
+        <addForeignKeyConstraint baseColumnNames="ORDER_ID" baseTableName="RYS_ORDER_LINE"
+                                 constraintName="FK_RYS_ORDER_LINE_ON_ORDER" referencedColumnNames="ID"
+                                 referencedTableName="RYS_ORDER"/>
+
+        <createIndex indexName="IDX_ORDERLINE_ORDER_ID" tableName="RYS_ORDER_LINE">
+            <column name="ORDER_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="4" author="rys">
+        <addForeignKeyConstraint baseColumnNames="STOCK_ITEM_ID" baseTableName="RYS_ORDER_LINE"
+                                 constraintName="FK_RYS_ORDER_LINE_ON_STOCK_ITEM" referencedColumnNames="ID"
+                                 referencedTableName="RYS_STOCK_ITEM"/>
+
+        <createIndex indexName="IDX_ORDERLINE_STOCK_ITEM_ID" tableName="RYS_ORDER_LINE">
+            <column name="STOCK_ITEM_ID"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="5" author="rys">
+        <addForeignKeyConstraint baseColumnNames="CUSTOMER_ID" baseTableName="RYS_ORDER"
+                                 constraintName="FK_RYS_ORDER_ON_CUSTOMER" referencedColumnNames="ID"
+                                 referencedTableName="RYS_CUSTOMER"/>
+
+        <createIndex indexName="IDX_ORDER_CUSTOMER_ID" tableName="RYS_ORDER">
+            <column name="CUSTOMER_ID"/>
+        </createIndex>
+    </changeSet>
+</databaseChangeLog>

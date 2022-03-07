@@ -1,8 +1,7 @@
 package de.diedavids.jmix.rys.product;
 
-import de.diedavids.jmix.rys.entity.Currency;
-import de.diedavids.jmix.rys.entity.Money;
-import de.diedavids.jmix.rys.test_support.ValidationVerification;
+import de.diedavids.jmix.rys.test_support.Validations;
+import de.diedavids.jmix.rys.test_support.test_data.ProductCategories;
 import io.jmix.core.DataManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,40 +11,28 @@ import org.junit.jupiter.params.provider.NullSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
 import java.util.List;
 
-import static java.math.BigDecimal.ONE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class ProductCategoryValidationTest {
 
     @Autowired
-    DataManager dataManager;
+    private Validations validations;
 
     @Autowired
-    ValidationVerification validationVerification;
-    
-    private ProductCategory category;
+    private ProductCategories productCategories;
 
-    @BeforeEach
-    void setUp() {
-        category = dataManager.create(ProductCategory.class);
-    }
 
     @Test
     void given_validProductCategory_when_validate_then_noViolationOccurs() {
 
         // given
-        category.setName("Foo Category");
+        ProductCategory productCategory = productCategories.createDefault();
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(category);
-
-        // then
-        assertThat(violations)
-                .isEmpty();
+        // expect
+        validations.assertNoViolations(productCategory);
     }
 
     @NullSource
@@ -54,21 +41,13 @@ class ProductCategoryValidationTest {
     void given_productCategoryWithoutUnit_when_validate_then_oneViolationOccurs(String name) {
 
         // given
-        category.setName(name);
+        ProductCategory productCategory = productCategories.create(
+                productCategories.defaultData()
+                        .name(name)
+                        .build()
+        );
 
-        // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(category);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
-
-        ValidationVerification.ValidationResult unitViolation = violations.get(0);
-
-        assertThat(unitViolation.getAttribute())
-                .isEqualTo("name");
-
-        assertThat(unitViolation.getErrorType())
-                .isEqualTo(validationVerification.validationMessage("NotBlank"));
+        // expect
+        validations.assertExactlyOneViolationWith(productCategory, "name", "NotBlank");
     }
 }

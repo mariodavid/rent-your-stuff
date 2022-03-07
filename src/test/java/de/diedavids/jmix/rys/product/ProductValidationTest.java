@@ -1,6 +1,7 @@
 package de.diedavids.jmix.rys.product;
 
-import de.diedavids.jmix.rys.test_support.ValidationVerification;
+import de.diedavids.jmix.rys.test_support.Validations;
+import de.diedavids.jmix.rys.test_support.test_data.Products;
 import io.jmix.core.DataManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,43 +16,35 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ProductValidationTest {
 
     @Autowired
-    DataManager dataManager;
+    private DataManager dataManager;
 
     @Autowired
-    ValidationVerification validationVerification;
-    
-    private Product product;
+    private Validations validations;
+    @Autowired
+    private Products products;
 
-    @BeforeEach
-    void setUp() {
-        product = dataManager.create(Product.class);
-    }
 
     @Test
     void given_validProduct_when_validate_then_noViolationOccurs() {
 
         // given
-        product.setName("validName");
+        Product product = products.createDefault();
 
         // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(product);
-
-        // then
-        assertThat(violations)
-                .isEmpty();
+        validations.assertNoViolations(product);
     }
 
     @Test
     void given_productWithoutName_when_validate_then_oneViolationOccurs() {
 
         // given
-        product.setName(null);
+        Product product = products.create(
+                products.defaultData()
+                        .name(null)
+                        .build()
+        );
 
         // when
-        List<ValidationVerification.ValidationResult> violations = validationVerification.validate(product);
-
-        // then
-        assertThat(violations)
-                .hasSize(1);
+        validations.assertExactlyOneViolationWith(product, "name", "NotNull");
     }
 }

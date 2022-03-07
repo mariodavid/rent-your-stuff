@@ -1,8 +1,7 @@
 package de.diedavids.jmix.rys.customer.screen;
 
 import de.diedavids.jmix.rys.customer.Customer;
-import de.diedavids.jmix.rys.entity.Address;
-import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
+import de.diedavids.jmix.rys.test_support.test_data.Customers;
 import de.diedavids.jmix.rys.test_support.ui.ScreenInteractions;
 import de.diedavids.jmix.rys.test_support.ui.TableInteractions;
 import de.diedavids.jmix.rys.test_support.ui.WebIntegrationTest;
@@ -21,24 +20,13 @@ class CustomerBrowseTest extends WebIntegrationTest {
     DataManager dataManager;
 
     private Customer customer;
+    @Autowired
+    private Customers customers;
 
 
     @BeforeEach
     void setUp() {
-        createInitialCustomer();
-    }
-
-    private void createInitialCustomer() {
-        customer = dataManager.create(Customer.class);
-
-        customer.setFirstName("Foo");
-        customer.setLastName("Bar");
-        Address address = dataManager.create(Address.class);
-
-        address.setStreet("Foo Street 1");
-        customer.setAddress(address);
-
-        customer = dataManager.save(customer);
+        customer = customers.saveDefault();
     }
 
     @Test

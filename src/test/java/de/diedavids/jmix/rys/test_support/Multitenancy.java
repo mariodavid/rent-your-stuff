@@ -14,8 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Component
 @Scope("prototype")
-@Component("rys_Multitenancy")
 public class Multitenancy {
 
 

@@ -1,8 +1,10 @@
 package de.diedavids.jmix.rys.product.screen;
 
 import de.diedavids.jmix.rys.product.ProductCategory;
+import de.diedavids.jmix.rys.product.ProductCategoryData;
 import de.diedavids.jmix.rys.product.screen.productcategory.ProductCategoryEdit;
 import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
+import de.diedavids.jmix.rys.test_support.test_data.ProductCategories;
 import de.diedavids.jmix.rys.test_support.ui.FormInteractions;
 import de.diedavids.jmix.rys.test_support.ui.ScreenInteractions;
 import de.diedavids.jmix.rys.test_support.ui.TableInteractions;
@@ -25,6 +27,10 @@ class ProductCategoryEditTest extends WebIntegrationTest {
 
     @Autowired
     DataManager dataManager;
+    @Autowired
+    private ProductCategories productCategories;
+
+
 
     FormInteractions formInteractions;
 
@@ -37,8 +43,8 @@ class ProductCategoryEditTest extends WebIntegrationTest {
         formInteractions = FormInteractions.of(productCategoryEdit);
 
         // and:
-        String name = "Foo ProductCategory" + UUID.randomUUID();
-        formInteractions.setTextFieldValue("nameField", name);
+        ProductCategoryData categoryData = productCategories.defaultData().build();
+        formInteractions.setTextFieldValue("nameField", categoryData.getName());
 
         // when:
         OperationResult operationResult = formInteractions.saveForm();
@@ -47,7 +53,7 @@ class ProductCategoryEditTest extends WebIntegrationTest {
                 .isEqualTo(OperationResult.success());
 
         // then:
-        Optional<ProductCategory> savedProductCategory = findProductCategoryByAttribute("name", name);
+        Optional<ProductCategory> savedProductCategory = findProductCategoryByAttribute("name", categoryData.getName());
 
         assertThat(savedProductCategory)
                 .isPresent();
