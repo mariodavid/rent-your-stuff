@@ -3,8 +3,11 @@ package de.diedavids.jmix.rys.order;
 import de.diedavids.jmix.rys.entity.StandardTenantEntity;
 import de.diedavids.jmix.rys.order.validation.ValidRentalPeriod;
 import de.diedavids.jmix.rys.product.StockItem;
+import io.jmix.core.MetadataTools;
+import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
+import io.jmix.core.metamodel.annotation.JmixProperty;
 import io.jmix.core.validation.group.UiCrossFieldChecks;
 
 import javax.persistence.*;
@@ -12,6 +15,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import javax.validation.groups.Default;
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @JmixEntity
 @Table(name = "RYS_ORDER_LINE", indexes = {
@@ -41,6 +45,15 @@ public class OrderLine extends StandardTenantEntity {
     @NotNull
     @Column(name = "ENDS_AT", nullable = false)
     private LocalDateTime endsAt;
+
+    @Transient
+    @JmixProperty
+    @DependsOnProperties({"stockItem", "order"})
+    public String getCaption() {
+        return Optional.ofNullable(getStockItem())
+                .map(it -> String.format("%s - %s", it.getIdentifier(), getOrder().getCustomer().getInstanceName()))
+                .orElse("");
+    }
 
     public LocalDateTime getEndsAt() {
         return endsAt;
