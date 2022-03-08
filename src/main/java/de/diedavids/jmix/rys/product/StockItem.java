@@ -1,6 +1,8 @@
 package de.diedavids.jmix.rys.product;
 
 import de.diedavids.jmix.rys.entity.StandardTenantEntity;
+import io.jmix.core.MetadataTools;
+import io.jmix.core.metamodel.annotation.DependsOnProperties;
 import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 
@@ -12,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Table(name = "RYS_STOCK_ITEM")
 @Entity(name = "rys_StockItem")
 public class StockItem extends StandardTenantEntity {
-    @InstanceName
+
     @NotBlank
     @Column(name = "IDENTIFIER", nullable = false)
     private String identifier;
@@ -36,5 +38,11 @@ public class StockItem extends StandardTenantEntity {
 
     public void setIdentifier(String identifier) {
         this.identifier = identifier;
+    }
+
+    @InstanceName
+    @DependsOnProperties({"identifier", "product"})
+    public String getInstanceName(MetadataTools metadataTools) {
+        return String.format("%s (%s)", metadataTools.getInstanceName(product), identifier);
     }
 }

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        xmlns:c="http://jmix.io/schema/ui/jpql-condition"
+        caption="msg://orderBrowse.caption"
+        focusComponent="calendar">
+    <data readOnly="true">
+        <collection id="productsDc"
+                    class="de.diedavids.jmix.rys.product.Product">
+            <fetchPlan extends="_base">
+                <property name="category"/>
+            </fetchPlan>
+            <loader id="productsDl">
+                <query>
+                    <![CDATA[select e from rys_Product e]]>
+                </query>
+            </loader>
+        </collection>
+        <collection id="orderLinesDc"
+                    class="de.diedavids.jmix.rys.order.OrderLine">
+            <fetchPlan extends="_base" />
+            <loader id="orderLinesDl">
+                <query>
+                    <![CDATA[select e from rys_OrderLine e where e.startsAt >= :startsAt and e.endsAt <= :endsAt and e.stockItem.product = :product]]>
+<!--                    <condition>-->
+<!--                        <c:jpql>-->
+<!--                            <c:where>e.type in :type</c:where>-->
+<!--                        </c:jpql>-->
+<!--                    </condition>-->
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <screenSettings id="settingsFacet" auto="true"/>
+    </facets>
+    <actions>
+        <action id="lookupSelectAction"
+                caption="msg:///actions.Select"
+                icon="LOOKUP_OK"
+                primary="true"
+                shortcut="${COMMIT_SHORTCUT}"/>
+        <action id="lookupCancelAction"
+                caption="msg:///actions.Cancel"
+                icon="LOOKUP_CANCEL"/>
+    </actions>
+    <dialogMode height="600"
+                width="800"/>
+    <layout expand="calendarFilter" spacing="true">
+
+        <entityComboBox caption="msg://product" optionsContainer="productsDc" id="productField" width="100%"/>
+        <hbox spacing="true" id="calendarFilter" expand="split" width="100%">
+            <split
+                    orientation="horizontal"
+                    id="split"
+                    pos="20"
+                    height="100%"
+                    dockable="true"
+                    dockMode="LEFT"
+            >
+                <vbox id="filterBox" spacing="true" align="TOP_CENTER" margin="true" width="95%">
+                    <groupBox stylename="light"
+                              width="100%"
+                              caption="msg://overview">
+                        <datePicker id="calendarNavigator"
+                                    datatype="localDate"
+                                    width="100%"
+                        />
+                    </groupBox>
+                    <groupBox stylename="light"
+                              width="100%"
+                              caption="msg://calendarMode">
+                        <radioButtonGroup
+                                width="100%"
+                                orientation="horizontal"
+                                stylename="button-switcher"
+                                optionsEnum="de.diedavids.jmix.rys.order.screen.calendar.CalendarMode"
+                                id="calendarMode"
+                        />
+                    </groupBox>
+<!--                    <groupBox stylename="light"-->
+<!--                              width="100%"-->
+<!--                              caption="msg://type">-->
+<!--                        <checkBoxGroup id="typeMultiFilter"-->
+<!--                                       stylename="order-type"-->
+<!--                                       orientation="vertical"/>-->
+<!--                    </groupBox>-->
+                </vbox>
+                <vbox id="calendarBox"
+                      spacing="true"
+                      margin="true"
+                      width="100%"
+                      height="100%"
+                      expand="calendar"
+                >
+                    <hbox expand="navigator" spacing="true" margin="true">
+                        <buttonsPanel id="navigator" align="MIDDLE_RIGHT" margin="false" spacing="false">
+                            <button id="navigatorCurrent"
+                                    stylename="borderless-colored"
+                                    icon="HOME"/>
+                            <button id="navigatorPrevious"
+                                    stylename="borderless-colored"
+                                    icon="CARET_LEFT"/>
+                            <button id="navigatorNext"
+                                    stylename="borderless-colored"
+                                    icon="CARET_RIGHT"/>
+                        </buttonsPanel>
+                        <label id="calendarTitle"
+                               stylename="h3"
+                               align="MIDDLE_CENTER"
+                               icon="font-icon:CALENDAR"
+                               width="200px"/>
+                    </hbox>
+                    <calendar id="calendar"
+                              dataContainer="orderLinesDc"
+                              width="100%"
+                              captionProperty="caption"
+                              startDateProperty="startsAt"
+                              endDateProperty="endsAt"
+                              firstVisibleDayOfWeek="2"
+                              firstVisibleHourOfDay="5"
+                              lastVisibleHourOfDay="20"
+                              navigationButtonsVisible="false"/>
+                </vbox>
+            </split>
+        </hbox>
+        <hbox id="lookupActions" spacing="true" visible="false">
+            <button action="lookupSelectAction"/>
+            <button action="lookupCancelAction"/>
+        </hbox>
+    </layout>
+</window>
