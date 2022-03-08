@@ -8,6 +8,9 @@
         <item screen="rys_Product.browse" caption="msg://de.diedavids.jmix.rys.product.screen/productBrowse.menu"/>
         <item screen="rys_ProductCategory.browse"
               caption="msg://de.diedavids.jmix.rys.product.screen.productcategory/productCategoryBrowse.menu"/>
+        <item screen="rys_Order.browse" caption="msg://de.diedavids.jmix.rys.order.screen/orderBrowse.menu"/>
+        <item screen="rys_StockItem.browse"
+              caption="msg://de.diedavids.jmix.rys.product.screen.stockitem/stockItemBrowse.menu"/>
     </menu>
 
 </menu-config>
