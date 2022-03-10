@@ -1,16 +1,15 @@
 package de.diedavids.jmix.rys.test_support.ui;
 
 import io.jmix.core.metamodel.datatype.impl.EnumClass;
-import io.jmix.ui.component.Button;
-import io.jmix.ui.component.ComboBox;
-import io.jmix.ui.component.CurrencyField;
-import io.jmix.ui.component.TextField;
+import io.jmix.ui.component.*;
 import io.jmix.ui.screen.StandardEditor;
 import io.jmix.ui.util.OperationResult;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class FormInteractions {
@@ -46,6 +45,10 @@ public class FormInteractions {
         return (ComboBox<T>) editor.getWindow().getComponent(componentId);
     }
 
+    private <T> EntitySuggestionField<T> entitySuggestionField(String componentId, Class<T> entityClass) {
+        return (EntitySuggestionField<T>) editor.getWindow().getComponent(componentId);
+    }
+
     @Nullable
     Button button(String buttonId) {
         return (Button) editor.getWindow().getComponent(buttonId);
@@ -73,10 +76,24 @@ public class FormInteractions {
         return entityComboBoxField(componentId, entityClass).getOptions().getOptions().collect(Collectors.toList());
     }
 
-    public <T> void setEntityComboxBoxFieldValue(String componentId, T entity, Class<T> entityClass) {
-        ComboBox<T> tComboBox = entityComboBoxField(componentId, entityClass);
+    public <T> void setEntityComboBoxFieldValue(String componentId, T entity, Class<T> entityClass) {
+        ComboBox<T> comboBox = entityComboBoxField(componentId, entityClass);
 
-        T entityFromComboBox = tComboBox.getOptions().getOptions().filter(t -> t.equals(entity)).findFirst().orElseThrow();
-        tComboBox.setValue(entityFromComboBox);
+        T entityFromComboBox = comboBox.getOptions().getOptions().filter(t -> t.equals(entity)).findFirst().orElseThrow();
+        comboBox.setValue(entityFromComboBox);
     }
+    public <T> void setEntitySuggestionFieldValue(String componentId, T entity, Class<T> entityClass) {
+        EntitySuggestionField<T> entitySuggestionField = entitySuggestionField(componentId, entityClass);
+
+        entitySuggestionField.setValueFromUser(entity);
+    }
+
+    @NotNull
+    public <T> List<T> getSuggestions(String searchString, String componentId, Class<T> entityClass) {
+        EntitySuggestionField<T> entitySuggestionField = entitySuggestionField(componentId, entityClass);
+
+        return entitySuggestionField.getSearchExecutor()
+                .search(searchString, Map.of());
+    }
+
 }
