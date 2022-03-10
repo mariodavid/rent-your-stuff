@@ -33,15 +33,33 @@
                 width="800"/>
     <layout spacing="true" expand="scrollBox">
         <scrollBox id="scrollBox" spacing="true">
+            <groupBox id="customerGroupBox" caption="msg://customer" icon="font-icon:USER" width="100%">
+
+                <entitySuggestionField id="customerField"
+                                       dataContainer="orderDc"
+                                       inputPrompt="Search for Customer"
+                                       property="customer"
+                                       width="100%">
+                    <actions>
+                        <action id="lookup" type="entity_lookup"/>
+                        <action id="open" type="entity_open">
+                            <properties>
+                                <property name="openMode" value="DIALOG" />
+                            </properties>
+                        </action>
+                    </actions>
+                    <query entityClass="de.diedavids.jmix.rys.customer.Customer"
+                           escapeValueForLike="true"
+                           searchStringFormat="%${searchString}%">
+                        select c from rys_Customer c where
+                        lower(c.firstName) like lower(:searchString) escape '\' or
+                        lower(c.lastName) like lower(:searchString) escape '\'
+                    </query>
+                </entitySuggestionField>
+            </groupBox>
             <form id="form" dataContainer="orderDc">
                 <column width="350px">
                     <dateField id="orderDateField" property="orderDate"/>
-                    <entityPicker id="customerField" property="customer">
-                        <actions>
-                            <action id="entityLookup" type="entity_lookup"/>
-                            <action id="entityClear" type="entity_clear"/>
-                        </actions>
-                    </entityPicker>
                 </column>
             </form>
             <groupBox id="orderLinesBox" caption="msg://de.diedavids.jmix.rys.order/Order.orderLines">

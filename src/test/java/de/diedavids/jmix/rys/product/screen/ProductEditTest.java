@@ -241,7 +241,7 @@ class ProductEditTest extends WebIntegrationTest {
             formInteractions.setTextFieldValue("nameField", productData.getName());
 
             // and:
-            formInteractions.setEntityComboxBoxFieldValue("categoryField", productCategory1, ProductCategory.class);
+            formInteractions.setEntityComboBoxFieldValue("categoryField", productCategory1, ProductCategory.class);
 
             // when:
             OperationResult operationResult = formInteractions.saveForm();
