@@ -1,10 +1,15 @@
 package de.diedavids.jmix.rys.entity;
 
+import com.google.common.base.Strings;
+import io.jmix.core.metamodel.annotation.DependsOnProperties;
+import io.jmix.core.metamodel.annotation.InstanceName;
 import io.jmix.core.metamodel.annotation.JmixEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotBlank;
+
+import static com.google.common.base.Strings.nullToEmpty;
 
 @Embeddable
 @JmixEntity(name = "rys_Address")
@@ -41,5 +46,11 @@ public class Address {
 
     public void setStreet(String street) {
         this.street = street;
+    }
+
+    @InstanceName
+    @DependsOnProperties({"street", "postCode", "city"})
+    public String getInstanceName() {
+        return String.format("%s\n%s %s", nullToEmpty(street), nullToEmpty(postCode), nullToEmpty(city));
     }
 }

@@ -33,30 +33,44 @@
                 width="800"/>
     <layout spacing="true" expand="scrollBox">
         <scrollBox id="scrollBox" spacing="true">
-            <groupBox id="customerGroupBox" caption="msg://customer" icon="font-icon:USER" width="100%">
+            <hbox spacing="true" width="100%" height="200px">
+                <groupBox id="customerGroupBox" caption="msg://customer" icon="font-icon:USER" height="100%"  width="100%">
+                    <vbox id="customerSearchBox" visible="true">
+                        <entitySuggestionField id="customerField"
+                                               dataContainer="orderDc"
+                                               inputPrompt="Search for Customer"
+                                               property="customer"
+                                               width="100%">
+                            <actions>
+                                <action id="lookup" type="entity_lookup"/>
+                                <action id="open" type="entity_open">
+                                    <properties>
+                                        <property name="openMode" value="DIALOG"/>
+                                    </properties>
+                                </action>
+                            </actions>
+                            <query entityClass="de.diedavids.jmix.rys.customer.Customer"
+                                   escapeValueForLike="true"
+                                   searchStringFormat="%${searchString}%">
+                                select c from rys_Customer c where
+                                lower(c.firstName) like lower(:searchString) escape '\' or
+                                lower(c.lastName) like lower(:searchString) escape '\'
+                            </query>
+                        </entitySuggestionField>
+                    </vbox>
+                    <vbox id="customerDetailsBox" spacing="true" visible="false" width="100%">
+                        <hbox id="customerTitleBox" spacing="true" expand="customerDisplayField" width="100%">
+                            <label id="customerDisplayField" dataContainer="orderDc" property="customer"
+                                   stylename="h2"/>
+                            <button id="clearCustomerBtn" icon="REMOVE" stylename="borderless-colored"/>
+                        </hbox>
+                        <label id="customerAddressField" dataContainer="orderDc" property="customer.address"/>
+                    </vbox>
+                </groupBox>
+                <groupBox id="timeRangeGroupBox" width="100%" height="100%" caption="msg://timeRange" icon="CLOCK_O">
 
-                <entitySuggestionField id="customerField"
-                                       dataContainer="orderDc"
-                                       inputPrompt="Search for Customer"
-                                       property="customer"
-                                       width="100%">
-                    <actions>
-                        <action id="lookup" type="entity_lookup"/>
-                        <action id="open" type="entity_open">
-                            <properties>
-                                <property name="openMode" value="DIALOG" />
-                            </properties>
-                        </action>
-                    </actions>
-                    <query entityClass="de.diedavids.jmix.rys.customer.Customer"
-                           escapeValueForLike="true"
-                           searchStringFormat="%${searchString}%">
-                        select c from rys_Customer c where
-                        lower(c.firstName) like lower(:searchString) escape '\' or
-                        lower(c.lastName) like lower(:searchString) escape '\'
-                    </query>
-                </entitySuggestionField>
-            </groupBox>
+                </groupBox>
+            </hbox>
             <form id="form" dataContainer="orderDc">
                 <column width="350px">
                     <dateField id="orderDateField" property="orderDate"/>
