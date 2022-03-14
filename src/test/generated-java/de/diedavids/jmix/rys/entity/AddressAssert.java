@@ -52,6 +52,29 @@ public class AddressAssert extends AbstractObjectAssert<AddressAssert, Address> 
   }
 
   /**
+   * Verifies that the actual Address's instanceName is equal to the given one.
+   * @param instanceName the given instanceName to compare the actual Address's instanceName to.
+   * @return this assertion object.
+   * @throws AssertionError - if the actual Address's instanceName is not equal to the given one.
+   */
+  public AddressAssert hasInstanceName(String instanceName) {
+    // check that actual Address we want to make assertions on is not null.
+    isNotNull();
+
+    // overrides the default error message with a more explicit one
+    String assertjErrorMessage = "\nExpecting instanceName of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
+
+    // null safe check
+    String actualInstanceName = actual.getInstanceName();
+    if (!Objects.deepEquals(actualInstanceName, instanceName)) {
+      failWithMessage(assertjErrorMessage, actual, instanceName, actualInstanceName);
+    }
+
+    // return the current assertion for method chaining
+    return this;
+  }
+
+  /**
    * Verifies that the actual Address's postCode is equal to the given one.
    * @param postCode the given postCode to compare the actual Address's postCode to.
    * @return this assertion object.

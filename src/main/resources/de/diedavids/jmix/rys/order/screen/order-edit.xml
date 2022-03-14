@@ -60,7 +60,9 @@
                     </vbox>
                     <vbox id="customerDetailsBox" spacing="true" visible="false" width="100%">
                         <hbox id="customerTitleBox" spacing="true" expand="customerDisplayField" width="100%">
-                            <label id="customerDisplayField" dataContainer="orderDc" property="customer"
+                            <label id="customerDisplayField"
+                                   dataContainer="orderDc"
+                                   property="customer"
                                    stylename="h2"/>
                             <button id="clearCustomerBtn" icon="REMOVE" stylename="borderless-colored"/>
                         </hbox>
