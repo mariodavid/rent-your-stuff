@@ -26,32 +26,41 @@ public class FormInteractions {
 
     @Nullable
     TextField<String> textField(String componentId) {
-        return (TextField<String>) editor.getWindow().getComponent(componentId);
+        return (TextField<String>) getComponent(componentId);
+    }
+    @Nullable
+    Label<String> labelField(String componentId) {
+        return (Label<String>) getComponent(componentId);
     }
     @Nullable
     TextField<Number> numberField(String componentId) {
-        return (TextField<Number>) editor.getWindow().getComponent(componentId);
+        return (TextField<Number>) getComponent(componentId);
     }
     @Nullable
     CurrencyField<Number> currencyField(String componentId) {
-        return (CurrencyField<Number>) editor.getWindow().getComponent(componentId);
+        return (CurrencyField<Number>) getComponent(componentId);
     }
 
     ComboBox<EnumClass<String>> comboBoxField(String componentId) {
-        return (ComboBox<EnumClass<String>>) editor.getWindow().getComponent(componentId);
+        return (ComboBox<EnumClass<String>>) getComponent(componentId);
     }
 
     <T> ComboBox<T> entityComboBoxField(String componentId, Class<T> entityClass) {
-        return (ComboBox<T>) editor.getWindow().getComponent(componentId);
+        return (ComboBox<T>) getComponent(componentId);
+    }
+
+    @Nullable
+    private Component getComponent(String componentId) {
+        return editor.getWindow().getComponent(componentId);
     }
 
     private <T> EntitySuggestionField<T> entitySuggestionField(String componentId, Class<T> entityClass) {
-        return (EntitySuggestionField<T>) editor.getWindow().getComponent(componentId);
+        return (EntitySuggestionField<T>) getComponent(componentId);
     }
 
     @Nullable
     Button button(String buttonId) {
-        return (Button) editor.getWindow().getComponent(buttonId);
+        return (Button) getComponent(buttonId);
     }
 
     public void setTextFieldValue(String componentId, String value) {
@@ -96,4 +105,15 @@ public class FormInteractions {
                 .search(searchString, Map.of());
     }
 
+    public boolean isVisible(String componentId) {
+        return getComponent(componentId).isVisibleRecursive();
+    }
+
+    public String getLabelValue(String componentId) {
+        return labelField(componentId).getRawValue();
+    }
+
+    public void click(String componentId) {
+        button(componentId).click();
+    }
 }

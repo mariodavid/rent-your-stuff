@@ -1,5 +1,7 @@
 package de.diedavids.jmix.rys.test_support.ui;
 
+import de.diedavids.jmix.rys.order.Order;
+import de.diedavids.jmix.rys.order.screen.OrderEdit;
 import io.jmix.core.DataManager;
 import io.jmix.ui.Screens;
 import io.jmix.ui.screen.Screen;
@@ -50,10 +52,13 @@ public class ScreenInteractions {
     }
 
     public <S extends StandardEditor<E>, E> S openEditorForCreation(Class<S> screenClass, Class<E> entityClass) {
-        S screen = screens.create(screenClass);
-        E newEntity = dataManager.create(entityClass);
+        return openEditorForEditing(screenClass, entityClass, dataManager.create(entityClass));
+    }
 
-        screen.setEntityToEdit(newEntity);
+    public <S extends StandardEditor<E>, E> S openEditorForEditing(Class<S> screenClass, Class<E> entityClass, E entity) {
+        S screen = screens.create(screenClass);
+
+        screen.setEntityToEdit(entity);
         screen.show();
         return screen;
     }
