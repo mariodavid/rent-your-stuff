@@ -20,7 +20,7 @@ assertjGenerator {
 apply plugin: 'org.springframework.boot'
 
 jmix {
-    bomVersion = '1.2.0-SNAPSHOT'
+    bomVersion = '1.2.1'
     projectId = 'rys'
 }
 
@@ -30,8 +30,7 @@ version = '0.0.1-SNAPSHOT'
 repositories {
     mavenCentral()
     maven {
-//        url 'https://global.repo.jmix.io/repository/public'
-        url 'https://nexus.jmix.io/repository/public'
+        url = 'https://global.repo.jmix.io/repository/public'
     }
 }
 
@@ -64,7 +63,6 @@ dependencies {
 
 
     testImplementation("org.hsqldb:hsqldb")
-
 
 
     compileOnly 'org.projectlombok:lombok:1.18.22'
