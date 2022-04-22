@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Value;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Value
@@ -15,6 +16,8 @@ import java.util.List;
 public class OrderData {
     LocalDate orderDate;
     Customer customer;
+    LocalDateTime pickupDate;
+    LocalDateTime returnDate;
     List<OrderLine> orderLines;
 }
     

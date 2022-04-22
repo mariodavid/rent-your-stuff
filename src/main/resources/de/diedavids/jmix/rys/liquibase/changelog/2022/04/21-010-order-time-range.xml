@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="0" author="rys">
+        <tagDatabase tag="beforeOrderTimeRange"/>
+    </changeSet>
+
+    <changeSet id="1" author="rys">
+        <addColumn tableName="RYS_ORDER">
+            <column name="PICKUP_DATE" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="2" author="rys">
+        <addColumn tableName="RYS_ORDER">
+            <column name="RETURN_DATE" type="DATETIME"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="3" author="rys">
+        <sql>
+            update rys_order o
+            set pickup_date = (select min(starts_at) from rys_order_line ol where ol.order_id = o.id),
+                return_date = (select max(ends_at) from rys_order_line ol where ol.order_id = o.id)
+            <comment>Pickup and return date will be copied from Order Lines to Orders</comment>
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="4" author="rys">
+        <tagDatabase tag="afterOrderTimeRange"/>
+    </changeSet>
+
+    <changeSet id="5" author="rys">
+        <addNotNullConstraint columnName="PICKUP_DATE" tableName="RYS_ORDER"/>
+        <addNotNullConstraint columnName="RETURN_DATE" tableName="RYS_ORDER"/>
+    </changeSet>
+</databaseChangeLog>

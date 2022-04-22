@@ -15,6 +15,7 @@ import javax.persistence.*;
 import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @JmixEntity
@@ -37,6 +38,30 @@ public class Order extends StandardTenantEntity {
     @Composition
     @OneToMany(mappedBy = "order")
     private List<OrderLine> orderLines;
+
+    @NotNull
+    @Column(name = "PICKUP_DATE", nullable = false)
+    private LocalDateTime pickupDate;
+
+    @NotNull
+    @Column(name = "RETURN_DATE", nullable = false)
+    private LocalDateTime returnDate;
+
+    public LocalDateTime getReturnDate() {
+        return returnDate;
+    }
+
+    public void setReturnDate(LocalDateTime returnDate) {
+        this.returnDate = returnDate;
+    }
+
+    public LocalDateTime getPickupDate() {
+        return pickupDate;
+    }
+
+    public void setPickupDate(LocalDateTime pickupDate) {
+        this.pickupDate = pickupDate;
+    }
 
     public List<OrderLine> getOrderLines() {
         return orderLines;
