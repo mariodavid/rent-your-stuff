@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 @Component
@@ -25,10 +27,15 @@ public class Orders
 
     public static final LocalDate DEFAULT_ORDER_DATE = LocalDate.now().plusDays(1);
 
+    public static final LocalDateTime DEFAULT_PICKUP_DATE = LocalDateTime.of(DEFAULT_ORDER_DATE, LocalTime.of(8, 0));
+    public static final LocalDateTime DEFAULT_RETURN_DATE = LocalDateTime.of(DEFAULT_ORDER_DATE, LocalTime.of(16, 0));
+
 
     @Override
     public OrderData.OrderDataBuilder defaultData() {
         return OrderData.builder()
+                .pickupDate(DEFAULT_PICKUP_DATE)
+                .returnDate(DEFAULT_RETURN_DATE)
                 .orderDate(DEFAULT_ORDER_DATE)
                 .customer(customers.createDefault())
                 .orderLines(List.of());

@@ -5,11 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd"
         objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+
+    <changeSet id="0" author="rys">
+        <tagDatabase tag="beforeOrderTimeRange"/>
+    </changeSet>
+
     <changeSet id="1" author="rys">
         <addColumn tableName="RYS_ORDER">
             <column name="PICKUP_DATE" type="DATETIME"/>
         </addColumn>
-
     </changeSet>
     <changeSet id="2" author="rys">
         <addColumn tableName="RYS_ORDER">
@@ -25,7 +29,12 @@
         </sql>
     </changeSet>
 
+
     <changeSet id="4" author="rys">
+        <tagDatabase tag="afterOrderTimeRange"/>
+    </changeSet>
+
+    <changeSet id="5" author="rys">
         <addNotNullConstraint columnName="PICKUP_DATE" tableName="RYS_ORDER"/>
         <addNotNullConstraint columnName="RETURN_DATE" tableName="RYS_ORDER"/>
     </changeSet>
