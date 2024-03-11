@@ -390,6 +390,52 @@ public class OrderAssert extends AbstractObjectAssert<OrderAssert, Order> {
 
 
   /**
+   * Verifies that the actual Order's pickupDate is equal to the given one.
+   * @param pickupDate the given pickupDate to compare the actual Order's pickupDate to.
+   * @return this assertion object.
+   * @throws AssertionError - if the actual Order's pickupDate is not equal to the given one.
+   */
+  public OrderAssert hasPickupDate(java.time.LocalDateTime pickupDate) {
+    // check that actual Order we want to make assertions on is not null.
+    isNotNull();
+
+    // overrides the default error message with a more explicit one
+    String assertjErrorMessage = "\nExpecting pickupDate of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
+
+    // null safe check
+    java.time.LocalDateTime actualPickupDate = actual.getPickupDate();
+    if (!Objects.deepEquals(actualPickupDate, pickupDate)) {
+      failWithMessage(assertjErrorMessage, actual, pickupDate, actualPickupDate);
+    }
+
+    // return the current assertion for method chaining
+    return this;
+  }
+
+  /**
+   * Verifies that the actual Order's returnDate is equal to the given one.
+   * @param returnDate the given returnDate to compare the actual Order's returnDate to.
+   * @return this assertion object.
+   * @throws AssertionError - if the actual Order's returnDate is not equal to the given one.
+   */
+  public OrderAssert hasReturnDate(java.time.LocalDateTime returnDate) {
+    // check that actual Order we want to make assertions on is not null.
+    isNotNull();
+
+    // overrides the default error message with a more explicit one
+    String assertjErrorMessage = "\nExpecting returnDate of:\n  <%s>\nto be:\n  <%s>\nbut was:\n  <%s>";
+
+    // null safe check
+    java.time.LocalDateTime actualReturnDate = actual.getReturnDate();
+    if (!Objects.deepEquals(actualReturnDate, returnDate)) {
+      failWithMessage(assertjErrorMessage, actual, returnDate, actualReturnDate);
+    }
+
+    // return the current assertion for method chaining
+    return this;
+  }
+
+  /**
    * Verifies that the actual Order's tenant is equal to the given one.
    * @param tenant the given tenant to compare the actual Order's tenant to.
    * @return this assertion object.
