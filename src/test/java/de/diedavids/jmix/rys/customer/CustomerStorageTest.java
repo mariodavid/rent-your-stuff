@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static de.diedavids.jmix.rys.order.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
@@ -30,8 +30,9 @@ class CustomerStorageTest {
         );
 
         // then
-        assertThat(savedCustomer)
-                .hasFirstName("Foo")
-                .hasLastName("Bar");
+        assertThat(savedCustomer.getFirstName())
+                .isEqualTo("Foo");
+        assertThat(savedCustomer.getLastName())
+                .isEqualTo("Bar");
     }
 }

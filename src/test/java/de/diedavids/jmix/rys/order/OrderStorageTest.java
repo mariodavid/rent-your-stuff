@@ -16,7 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-import static de.diedavids.jmix.rys.order.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 @SpringBootTest
@@ -98,11 +98,11 @@ public class OrderStorageTest {
         Order savedOrder = dataManager.load(Id.of(order)).one();
 
         // and
-        assertThat(savedOrder)
-                .hasCustomer(customer);
+        assertThat(savedOrder.getCustomer())
+                .isEqualTo(customer);
 
         // and
-        assertThat(savedOrder)
-                .hasOnlyOrderLines(orderLine1, orderLine2);
+        assertThat(savedOrder.getOrderLines())
+                .containsExactlyInAnyOrder(orderLine1, orderLine2);
     }
 }

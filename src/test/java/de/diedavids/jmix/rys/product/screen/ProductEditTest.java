@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static de.diedavids.jmix.rys.order.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 class ProductEditTest extends WebIntegrationTest {
@@ -134,8 +134,8 @@ class ProductEditTest extends WebIntegrationTest {
             assertThat(price.getPrice().getAmount())
                     .isEqualByComparingTo(productPriceData.getPrice().getAmount());
 
-            assertThat(price)
-                    .hasUnit(productPriceData.getUnit());
+            assertThat(price.getUnit())
+                    .isEqualTo(productPriceData.getUnit());
 
         }
 

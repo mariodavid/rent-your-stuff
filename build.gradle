@@ -1,21 +1,8 @@
 plugins {
     id 'io.jmix' version '1.5.5'
     id 'java'
-    id "com.github.fhermansson.assertj-generator" version "1.1.3"
 }
 
-assertjGenerator {
-    classOrPackageNames = [
-            'de.diedavids.jmix.rys.order.Order',
-            'de.diedavids.jmix.rys.order.OrderLine',
-            'de.diedavids.jmix.rys.product.Product',
-            'de.diedavids.jmix.rys.product.ProductCategory',
-            'de.diedavids.jmix.rys.product.ProductPrice',
-            'de.diedavids.jmix.rys.customer.Customer',
-            'de.diedavids.jmix.rys.entity.Address',
-            'de.diedavids.jmix.rys.entity.Money',
-    ]
-}
 
 apply plugin: 'org.springframework.boot'
 

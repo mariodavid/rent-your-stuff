@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
-import static de.diedavids.jmix.rys.order.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @Import(LiquibaseConfiguration.class)
@@ -92,9 +92,10 @@ class RentalPeriodToOrderMigrationTest {
         // then:
         Order orderWithMigratedTimeRange = systemAuthenticator.withSystem(() -> dataManager.load(Id.of(UUID.fromString(orderId), Order.class)).one());
 
-        assertThat(orderWithMigratedTimeRange)
-                .hasPickupDate(NOW)
-                .hasReturnDate(TOMORROW);
+        assertThat(orderWithMigratedTimeRange.getPickupDate())
+                .isEqualTo(NOW);
+        assertThat(orderWithMigratedTimeRange.getReturnDate())
+                .isEqualTo(TOMORROW);
     }
 
     private String insertOrderViaSQL(Customer customer) {

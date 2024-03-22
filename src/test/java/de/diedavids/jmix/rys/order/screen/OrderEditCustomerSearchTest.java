@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static de.diedavids.jmix.rys.order.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 class OrderEditCustomerSearchTest extends WebIntegrationTest {
@@ -92,8 +92,8 @@ class OrderEditCustomerSearchTest extends WebIntegrationTest {
         formInteractions.setEntitySuggestionFieldValue("customerField", mrMiyagi, Customer.class);
 
         // and:
-        assertThat(orderEdit.getEditedEntity())
-                .hasCustomer(mrMiyagi);
+        assertThat(orderEdit.getEditedEntity().getCustomer())
+                .isEqualTo(mrMiyagi);
     }
 
     @Test
@@ -169,8 +169,8 @@ class OrderEditCustomerSearchTest extends WebIntegrationTest {
         assertThat(formInteractions.isVisible("customerField"))
                 .isTrue();
 
-        assertThat(orderEdit.getEditedEntity())
-                .hasCustomer(null);
+        assertThat(orderEdit.getEditedEntity().getCustomer())
+                .isNull();
     }
 
     private OrderEdit openOrderEditor(Screens screens, Order order) {
