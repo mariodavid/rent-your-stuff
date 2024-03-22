@@ -3,7 +3,6 @@ package de.diedavids.jmix.rys.test_support.ui;
 import io.jmix.ui.component.Button;
 import io.jmix.ui.component.Table;
 import io.jmix.ui.screen.Screen;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
@@ -26,7 +25,6 @@ public class TableInteractions<E> {
         );
     }
 
-    @Nullable
     Button button(String buttonId) {
         return Optional.ofNullable((Button) table.getButtonsPanel().getComponent(buttonId)).orElseThrow();
     }

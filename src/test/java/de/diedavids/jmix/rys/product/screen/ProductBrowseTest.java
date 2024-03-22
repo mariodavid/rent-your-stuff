@@ -7,7 +7,6 @@ import de.diedavids.jmix.rys.test_support.ui.TableInteractions;
 import de.diedavids.jmix.rys.test_support.ui.WebIntegrationTest;
 import io.jmix.core.DataManager;
 import io.jmix.ui.Screens;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,7 +63,6 @@ class ProductBrowseTest extends WebIntegrationTest {
                 .isEqualTo(firstProduct);
     }
 
-    @NotNull
     private TableInteractions<Product> productTable(ProductBrowse productBrowse) {
         return TableInteractions.of(productBrowse, Product.class, "productsTable");
     }

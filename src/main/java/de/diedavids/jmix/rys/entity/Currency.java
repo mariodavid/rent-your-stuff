@@ -20,7 +20,7 @@ public enum Currency implements EnumClass<String> {
         return id;
     }
 
-    @Nullable
+
     public static Currency fromId(String id) {
         for (Currency at : Currency.values()) {
             if (at.getId().equals(id)) {

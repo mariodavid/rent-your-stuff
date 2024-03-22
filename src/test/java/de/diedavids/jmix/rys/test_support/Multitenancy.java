@@ -8,10 +8,11 @@ import io.jmix.core.security.SystemAuthenticator;
 import io.jmix.multitenancy.entity.Tenant;
 import io.jmix.security.role.assignment.RoleAssignmentRoleType;
 import io.jmix.securitydata.entity.RoleAssignmentEntity;
-import org.jetbrains.annotations.NotNull;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import javax.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Component
@@ -45,12 +46,10 @@ public class Multitenancy {
     }
 
 
-    @NotNull
     private Tenant initTenant() {
         return systemAuthenticator.withSystem(() -> dataManager.save(createTenant()));
     }
 
-    @NotNull
     private Tenant createTenant() {
         Tenant entity = dataManager.create(Tenant.class);
         String tenantId = uniqueString();
@@ -60,7 +59,6 @@ public class Multitenancy {
     }
 
 
-    @NotNull
     private User createUserForTenant(Tenant tenant, String roleCode) {
         return systemAuthenticator.withSystem(() -> {
             User user = createUser(tenant);
@@ -70,7 +68,6 @@ public class Multitenancy {
         });
     }
 
-    @NotNull
     private User createUser(Tenant tenant) {
         User user = dataManager.create(User.class);
         user.setTenant(tenant.getTenantId());
@@ -78,7 +75,6 @@ public class Multitenancy {
         return user;
     }
 
-    @NotNull
     private RoleAssignmentEntity createRoleAssignment(String roleCode, User user) {
         RoleAssignmentEntity userRoleAssignment = dataManager.create(RoleAssignmentEntity.class);
         userRoleAssignment.setUsername(user.getUsername());

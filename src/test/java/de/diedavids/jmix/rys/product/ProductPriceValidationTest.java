@@ -5,17 +5,11 @@ import de.diedavids.jmix.rys.entity.Money;
 import de.diedavids.jmix.rys.test_support.Validations;
 import de.diedavids.jmix.rys.test_support.test_data.ProductPrices;
 import io.jmix.core.DataManager;
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigDecimal;
-import java.util.List;
-
-import static java.math.BigDecimal.*;
-import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class ProductPriceValidationTest {

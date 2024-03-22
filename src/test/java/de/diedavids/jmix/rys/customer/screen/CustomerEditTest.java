@@ -11,11 +11,12 @@ import io.jmix.core.DataManager;
 import io.jmix.core.querycondition.PropertyCondition;
 import io.jmix.ui.Screens;
 import io.jmix.ui.util.OperationResult;
-import org.jetbrains.annotations.NotNull;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.validation.constraints.NotNull;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -93,7 +94,6 @@ class CustomerEditTest extends WebIntegrationTest {
 
     }
 
-    @NotNull
     private Optional<Customer> findCustomerByAttribute(String attribute, String value) {
         return dataManager.load(Customer.class)
                 .condition(PropertyCondition.equal(attribute, value))

@@ -3,23 +3,18 @@ package de.diedavids.jmix.rys.product.screen;
 import de.diedavids.jmix.rys.product.ProductCategory;
 import de.diedavids.jmix.rys.product.ProductCategoryData;
 import de.diedavids.jmix.rys.product.screen.productcategory.ProductCategoryEdit;
-import de.diedavids.jmix.rys.test_support.DatabaseCleanup;
 import de.diedavids.jmix.rys.test_support.test_data.ProductCategories;
 import de.diedavids.jmix.rys.test_support.ui.FormInteractions;
 import de.diedavids.jmix.rys.test_support.ui.ScreenInteractions;
-import de.diedavids.jmix.rys.test_support.ui.TableInteractions;
 import de.diedavids.jmix.rys.test_support.ui.WebIntegrationTest;
 import io.jmix.core.DataManager;
 import io.jmix.core.querycondition.PropertyCondition;
 import io.jmix.ui.Screens;
 import io.jmix.ui.util.OperationResult;
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,12 +22,9 @@ class ProductCategoryEditTest extends WebIntegrationTest {
 
     @Autowired
     DataManager dataManager;
+    FormInteractions formInteractions;
     @Autowired
     private ProductCategories productCategories;
-
-
-
-    FormInteractions formInteractions;
 
     @Test
     void given_validProductCategory_when_saveProductCategoryThroughTheForm_then_productCategoryIsSaved(Screens screens) {
@@ -58,7 +50,7 @@ class ProductCategoryEditTest extends WebIntegrationTest {
         assertThat(savedProductCategory)
                 .isPresent();
     }
-    
+
     @Test
     void given_productCategoryWithoutName_when_saveProductCategoryThroughTheForm_then_productCategoryIsNotSaved(Screens screens) {
 
@@ -84,7 +76,6 @@ class ProductCategoryEditTest extends WebIntegrationTest {
 
     }
 
-    @NotNull
     private Optional<ProductCategory> findProductCategoryByAttribute(String attribute, String value) {
         return dataManager.load(ProductCategory.class)
                 .condition(PropertyCondition.equal(attribute, value))

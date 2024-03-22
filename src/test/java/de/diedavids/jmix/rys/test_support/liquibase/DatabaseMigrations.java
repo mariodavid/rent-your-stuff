@@ -1,17 +1,18 @@
 package de.diedavids.jmix.rys.test_support.liquibase;
 
-import io.jmix.data.impl.liquibase.JmixLiquibase;
 import liquibase.Liquibase;
 import liquibase.exception.LiquibaseException;
+import liquibase.integration.spring.SpringLiquibase;
 import lombok.SneakyThrows;
-import org.jetbrains.annotations.NotNull;
+
 import org.springframework.jdbc.core.JdbcTemplate;
 
+import javax.validation.constraints.NotNull;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 
-public class DatabaseMigrations extends JmixLiquibase {
+public class DatabaseMigrations extends SpringLiquibase {
 
 
     @Override

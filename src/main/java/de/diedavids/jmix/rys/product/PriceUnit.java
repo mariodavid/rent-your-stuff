@@ -21,7 +21,7 @@ public enum PriceUnit implements EnumClass<String> {
         return id;
     }
 
-    @Nullable
+
     public static PriceUnit fromId(String id) {
         for (PriceUnit at : PriceUnit.values()) {
             if (at.getId().equals(id)) {

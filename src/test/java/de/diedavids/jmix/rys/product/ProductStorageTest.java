@@ -7,7 +7,7 @@ import de.diedavids.jmix.rys.test_support.test_data.Products;
 import io.jmix.core.DataManager;
 import io.jmix.core.FetchPlan;
 import io.jmix.core.Id;
-import org.jetbrains.annotations.NotNull;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +103,6 @@ class ProductStorageTest {
                 .isEqualTo(productCategory);
     }
 
-    @NotNull
     private Optional<Product> loadProductWithCategory(Product product) {
         return dataManager.load(Id.of(product))
                 .fetchPlan(productFp -> {

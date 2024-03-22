@@ -4,9 +4,9 @@ import io.jmix.core.metamodel.datatype.impl.EnumClass;
 import io.jmix.ui.component.*;
 import io.jmix.ui.screen.StandardEditor;
 import io.jmix.ui.util.OperationResult;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
@@ -24,19 +24,16 @@ public class FormInteractions {
         return new FormInteractions(editor);
     }
 
-    @Nullable
+
     TextField<String> textField(String componentId) {
         return (TextField<String>) getComponent(componentId);
     }
-    @Nullable
     Label<String> labelField(String componentId) {
         return (Label<String>) getComponent(componentId);
     }
-    @Nullable
     TextField<Number> numberField(String componentId) {
         return (TextField<Number>) getComponent(componentId);
     }
-    @Nullable
     CurrencyField<Number> currencyField(String componentId) {
         return (CurrencyField<Number>) getComponent(componentId);
     }
@@ -49,7 +46,7 @@ public class FormInteractions {
         return (ComboBox<T>) getComponent(componentId);
     }
 
-    @Nullable
+
     private Component getComponent(String componentId) {
         return editor.getWindow().getComponent(componentId);
     }
@@ -58,7 +55,7 @@ public class FormInteractions {
         return (EntitySuggestionField<T>) getComponent(componentId);
     }
 
-    @Nullable
+
     Button button(String buttonId) {
         return (Button) getComponent(buttonId);
     }
@@ -97,7 +94,6 @@ public class FormInteractions {
         entitySuggestionField.setValueFromUser(entity);
     }
 
-    @NotNull
     public <T> List<T> getSuggestions(String searchString, String componentId, Class<T> entityClass) {
         EntitySuggestionField<T> entitySuggestionField = entitySuggestionField(componentId, entityClass);
 

@@ -14,7 +14,6 @@ import io.jmix.core.DataManager;
 import io.jmix.core.querycondition.PropertyCondition;
 import io.jmix.ui.Screens;
 import io.jmix.ui.util.OperationResult;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -29,6 +28,9 @@ import static de.diedavids.jmix.rys.order.Assertions.assertThat;
 
 class ProductEditTest extends WebIntegrationTest {
 
+    FormInteractions formInteractions;
+    ScreenInteractions screenInteractions;
+    ProductEdit productEdit;
     @Autowired
     private DataManager dataManager;
     @Autowired
@@ -38,9 +40,17 @@ class ProductEditTest extends WebIntegrationTest {
     @Autowired
     private ProductCategories productCategories;
 
-    FormInteractions formInteractions;
-    ScreenInteractions screenInteractions;
-    ProductEdit productEdit;
+    private void initProductEditForm(Screens screens) {
+        screenInteractions = ScreenInteractions.forEditor(screens, dataManager);
+        productEdit = screenInteractions.openEditorForCreation(ProductEdit.class, Product.class);
+        formInteractions = FormInteractions.of(productEdit);
+    }
+
+    private Optional<Product> findProductByAttribute(String attribute, String value) {
+        return dataManager.load(Product.class)
+                .condition(PropertyCondition.equal(attribute, value))
+                .optional();
+    }
 
     @Nested
     class WithOpenedProductEditForm {
@@ -208,7 +218,6 @@ class ProductEditTest extends WebIntegrationTest {
 
     }
 
-
     @Nested
     class ProductCategoryTests {
 
@@ -259,18 +268,5 @@ class ProductEditTest extends WebIntegrationTest {
                     .isEqualTo(productCategory1);
         }
 
-    }
-
-    private void initProductEditForm(Screens screens) {
-        screenInteractions = ScreenInteractions.forEditor(screens, dataManager);
-        productEdit = screenInteractions.openEditorForCreation(ProductEdit.class, Product.class);
-        formInteractions = FormInteractions.of(productEdit);
-    }
-
-    @NotNull
-    private Optional<Product> findProductByAttribute(String attribute, String value) {
-        return dataManager.load(Product.class)
-                .condition(PropertyCondition.equal(attribute, value))
-                .optional();
     }
 }
