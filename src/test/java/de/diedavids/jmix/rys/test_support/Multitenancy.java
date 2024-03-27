@@ -12,7 +12,7 @@ import io.jmix.securitydata.entity.RoleAssignmentEntity;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 @Component
