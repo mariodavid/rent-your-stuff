@@ -31,7 +31,6 @@ public class LiquibaseConfiguration {
 		liquibase.setDatabaseChangeLogLockTable(liquibaseProperties.getDatabaseChangeLogLockTable());
 		liquibase.setDropFirst(liquibaseProperties.isDropFirst());
 		liquibase.setShouldRun(liquibaseProperties.isEnabled());
-		liquibase.setLabels(liquibaseProperties.getLabels());
 		liquibase.setChangeLogParameters(liquibaseProperties.getParameters());
 		liquibase.setRollbackFile(liquibaseProperties.getRollbackFile());
 		liquibase.setTestRollbackOnUpdate(liquibaseProperties.isTestRollbackOnUpdate());
