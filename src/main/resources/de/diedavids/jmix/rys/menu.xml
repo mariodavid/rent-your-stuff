@@ -3,6 +3,7 @@
 
     <menu id="application" title="msg://de.diedavids.jmix.rys/menu.application.title" opened="true">
         <item view="rys_User.list" title="msg://de.diedavids.jmix.rys.view.user/UserListView.title"/>
+        <item view="rys_Product.list" title="msg://de.diedavids.jmix.rys.view.product/productListView.title"/>
     </menu>
 
 </menu-config>
