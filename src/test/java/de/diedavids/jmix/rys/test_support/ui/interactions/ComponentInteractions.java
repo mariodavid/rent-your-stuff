@@ -13,6 +13,7 @@ import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.radiobutton.RadioButtonGroup;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.textfield.TextArea;
+import de.diedavids.jmix.rys.product.PriceUnit;
 import io.jmix.core.metamodel.datatype.EnumClass;
 import io.jmix.flowui.component.UiComponentUtils;
 import io.jmix.flowui.component.codeeditor.CodeEditor;
@@ -21,11 +22,13 @@ import io.jmix.flowui.component.combobox.JmixComboBox;
 import io.jmix.flowui.component.datepicker.TypedDatePicker;
 import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.component.main.JmixListMenu;
+import io.jmix.flowui.component.select.JmixSelect;
 import io.jmix.flowui.component.tabsheet.JmixTabSheet;
 import io.jmix.flowui.component.textfield.JmixPasswordField;
 import io.jmix.flowui.component.textfield.TypedTextField;
 import io.jmix.flowui.view.View;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +65,9 @@ public class ComponentInteractions {
 
     public TypedTextField<Number> numberField(String componentId) {
         return (TypedTextField<Number>) getComponentNN(componentId);
+    }
+    public TypedTextField<BigDecimal> bigDecimalField(String componentId) {
+        return (TypedTextField<BigDecimal>) getComponentNN(componentId);
     }
 
     public TypedTextField<Long> longField(String componentId) {
@@ -125,7 +131,7 @@ public class ComponentInteractions {
 
     public <T> Stream<T> getEntityComboBoxValues(String componentId) {
         EntityComboBox<T> field = entityComboBoxField(componentId);
-        return field.getListDataView().getItems();
+        return field.getGenericDataView().getItems();
     }
 
     public <T> void setEntityComboBoxFieldValue(String componentId, T entity) {
@@ -217,6 +223,10 @@ public class ComponentInteractions {
         return (TypedDatePicker) getComponentNN(componentId);
     }
 
+
+    public <T> JmixSelect<T> selectField(String componentId) {
+        return (JmixSelect<T>) getComponentNN(componentId);
+    }
 
     public CodeEditor codeEditor(String componentId) {
         return (CodeEditor) getComponentNN(componentId);

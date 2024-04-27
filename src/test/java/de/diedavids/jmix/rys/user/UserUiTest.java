@@ -9,6 +9,7 @@ import de.diedavids.jmix.rys.test_support.ui.interactions.ViewInteractions;
 import de.diedavids.jmix.rys.view.user.UserDetailView;
 import de.diedavids.jmix.rys.view.user.UserListView;
 import io.jmix.core.DataManager;
+import io.jmix.flowui.DialogWindows;
 import io.jmix.flowui.ViewNavigators;
 import io.jmix.flowui.component.grid.DataGrid;
 import io.jmix.flowui.data.grid.DataGridItems;
@@ -16,8 +17,6 @@ import io.jmix.flowui.util.OperationResult;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Collection;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -31,12 +30,14 @@ public class UserUiTest extends UiIntegrationTest {
 
     @Autowired
     ViewNavigators viewNavigators;
+    @Autowired
+    private DialogWindows dialogWindows;
 
     @Test
     void test_createUser() {
 
         // given
-        ViewInteractions viewInteractions = ViewInteractions.of(viewNavigators);
+        ViewInteractions viewInteractions = ViewInteractions.of(viewNavigators, dialogWindows);
         ComponentInteractions listComponents = ComponentInteractions.of(viewInteractions.open(UserListView.class));
         Button createBtn = listComponents.button( "createBtn");
         createBtn.click();

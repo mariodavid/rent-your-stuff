@@ -1,24 +1,26 @@
 package de.diedavids.jmix.rys.test_support.ui.interactions;
 
 import com.vaadin.flow.router.QueryParameters;
+import io.jmix.flowui.DialogWindows;
 import io.jmix.flowui.ViewNavigators;
 import io.jmix.flowui.testassist.UiTestUtils;
 import io.jmix.flowui.view.View;
 
 
-
 public class ViewInteractions {
 
     private final ViewNavigators viewNavigators;
+    private final DialogWindows dialogWindows;
 
     public ViewInteractions(
-            ViewNavigators viewNavigators
-    ) {
+            ViewNavigators viewNavigators,
+            DialogWindows dialogWindows) {
         this.viewNavigators = viewNavigators;
+        this.dialogWindows = dialogWindows;
     }
 
-    public static ViewInteractions of(ViewNavigators viewNavigators) {
-        return new ViewInteractions(viewNavigators);
+    public static ViewInteractions of(ViewNavigators viewNavigators, DialogWindows dialogWindows) {
+        return new ViewInteractions(viewNavigators, dialogWindows);
     }
 
 
@@ -33,7 +35,15 @@ public class ViewInteractions {
             return (T) currentView;
         }
 
-        return null;
+        return findDialogWindowOfType(viewClass);
+    }
+
+    private <T> T findDialogWindowOfType(Class<T> viewClass) {
+        return dialogWindows.getOpenedDialogWindows().getDialogs()
+                .stream()
+                .map(dialog -> (T) dialog)
+                .findFirst()
+                .orElse(null);
     }
 
     public <V extends View<?>> V open(Class<V> viewClass) {

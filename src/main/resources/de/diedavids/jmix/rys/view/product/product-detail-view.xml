@@ -14,6 +14,15 @@
             <collection id="pricesDc" property="prices"/>
             <collection id="stockItemsDc" property="stockItems"/>
         </instance>
+        <collection id="productCategoriesDc"
+                    class="de.diedavids.jmix.rys.product.ProductCategory">
+            <fetchPlan extends="_base"/>
+            <loader id="productCategoriesDl" readOnly="true">
+                <query>
+                    <![CDATA[select e from rys_ProductCategory e]]>
+                </query>
+            </loader>
+        </collection>
     </data>
     <facets>
         <dataLoadCoordinator auto="true"/>
@@ -29,12 +38,7 @@
             >
                 <formLayout id="form" dataContainer="productDc">
                     <textField id="nameField" property="name"/>
-                    <entityPicker id="categoryField" property="category">
-                        <actions>
-                            <action id="entityLookup" type="entity_lookup"/>
-                            <action id="entityClear" type="entity_clear"/>
-                        </actions>
-                    </entityPicker>
+                    <entityComboBox id="categoryField" property="category" itemsContainer="productCategoriesDc"/>
                 </formLayout>
             </tab>
             <tab id="descriptionTab"
@@ -48,9 +52,9 @@
                 <vbox width="100%">
                     <h4 text="msg://de.diedavids.jmix.rys.product/Product.prices"/>
                     <hbox id="pricesButtonsPanel" classNames="buttons-panel">
-                        <button action="pricesDataGrid.pricesCreate"/>
-                        <button action="pricesDataGrid.pricesEdit"/>
-                        <button action="pricesDataGrid.pricesRemove"/>
+                        <button id="createPriceBtn" action="pricesDataGrid.pricesCreate"/>
+                        <button id="editPriceBtn" action="pricesDataGrid.pricesEdit"/>
+                        <button id="removePriceBtn"  action="pricesDataGrid.pricesRemove"/>
                     </hbox>
                     <dataGrid id="pricesDataGrid" dataContainer="pricesDc" width="100%" minHeight="20em">
                         <actions>

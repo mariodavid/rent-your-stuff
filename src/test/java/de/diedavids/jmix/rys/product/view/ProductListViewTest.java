@@ -8,6 +8,7 @@ import de.diedavids.jmix.rys.test_support.ui.interactions.ViewInteractions;
 import de.diedavids.jmix.rys.view.product.ProductDetailView;
 import de.diedavids.jmix.rys.view.product.ProductListView;
 import io.jmix.core.DataManager;
+import io.jmix.flowui.DialogWindows;
 import io.jmix.flowui.ViewNavigators;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,8 @@ class ProductListViewTest extends UiIntegrationTest {
     private Products products;
     @Autowired
     private ViewNavigators viewNavigators;
+    @Autowired
+    private DialogWindows dialogWindows;
     private Product product;
 
 
@@ -36,7 +39,7 @@ class ProductListViewTest extends UiIntegrationTest {
     void given_oneProductExists_when_openProductBrowse_then_tableContainsTheProduct() {
 
         // given:
-        ViewInteractions viewInteractions = ViewInteractions.of(viewNavigators);
+        ViewInteractions viewInteractions = ViewInteractions.of(viewNavigators, dialogWindows);
         ProductListView listView = viewInteractions.open(ProductListView.class);
         DataGridInteractions<Product> dataGrid = dataGrid(listView);
 
@@ -50,7 +53,7 @@ class ProductListViewTest extends UiIntegrationTest {
     void given_oneProductExists_when_editProduct_then_editProductEditorIsShown() {
 
         // given:
-        ViewInteractions viewInteractions = ViewInteractions.of(viewNavigators);
+        ViewInteractions viewInteractions = ViewInteractions.of(viewNavigators, dialogWindows);
         ProductListView listView = viewInteractions.open(ProductListView.class);
         DataGridInteractions<Product> dataGrid = dataGrid(listView);
 
