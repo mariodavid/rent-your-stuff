@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<menu-config xmlns="http://jmix.io/schema/ui/menu">
+<menu-config xmlns="http://jmix.io/schema/flowui/menu">
 
-    <menu id="application" caption="msg://de.diedavids.jmix.rys/menu.application" insertBefore="administration">
-        <item screen="rys_User.browse" caption="msg://de.diedavids.jmix.rys.screen.user/UserBrowse.caption"/>
-        <item screen="themeSettingsScreen" caption="msg://io.jmix.ui.app.themesettings/themeSettings.caption"/>
-        <item screen="rys_Customer.browse" caption="msg://de.diedavids.jmix.rys.customer.screen/customerBrowse.menu"/>
-        <item screen="rys_Product.browse" caption="msg://de.diedavids.jmix.rys.product.screen/productBrowse.menu"/>
-        <item screen="rys_ProductCategory.browse"
-              caption="msg://de.diedavids.jmix.rys.product.screen.productcategory/productCategoryBrowse.menu"/>
-        <item screen="rys_Order.browse" caption="msg://de.diedavids.jmix.rys.order.screen/orderBrowse.menu"/>
-        <item screen="rys_StockItem.browse"
-              caption="msg://de.diedavids.jmix.rys.product.screen.stockitem/stockItemBrowse.menu"/>
+    <menu id="application" title="msg://de.diedavids.jmix.rys/menu.application.title" opened="true">
+        <item view="rys_User.list" title="msg://de.diedavids.jmix.rys.view.user/UserListView.title"/>
+        <item view="rys_Product.list" title="msg://de.diedavids.jmix.rys.view.product/productListView.title"/>
+        <item view="rys_ProductCategory.list"
+              title="msg://de.diedavids.jmix.rys.product.view.productcategory/productCategoryListView.title"/>
     </menu>
 
 </menu-config>

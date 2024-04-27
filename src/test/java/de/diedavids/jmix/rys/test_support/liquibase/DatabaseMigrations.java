@@ -7,7 +7,7 @@ import lombok.SneakyThrows;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 import java.sql.Connection;
 import java.util.List;
 import java.util.Map;

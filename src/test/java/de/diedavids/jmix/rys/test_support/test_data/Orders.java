@@ -19,8 +19,6 @@ public class Orders
     @Autowired
     OrderRepository orderRepository;
     @Autowired
-    OrderLines orderLines;
-    @Autowired
     Customers customers;
     @Autowired
     private OrderMapper orderMapper;

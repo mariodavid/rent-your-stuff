@@ -2,8 +2,8 @@ package de.diedavids.jmix.rys.order.validation;
 
 import de.diedavids.jmix.rys.order.OrderLine;
 
-import javax.validation.ConstraintValidator;
-import javax.validation.ConstraintValidatorContext;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
 
 public class ValidRentalPeriodValidator implements ConstraintValidator<ValidRentalPeriod, OrderLine> {
     @Override

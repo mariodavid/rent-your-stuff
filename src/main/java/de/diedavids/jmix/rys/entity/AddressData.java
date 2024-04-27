@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Value;
 
-import javax.persistence.Column;
+import jakarta.persistence.Column;
 
 @Value
 @Builder
@@ -15,4 +15,3 @@ public class AddressData {
     String postCode;
     String city;
 }
-    
